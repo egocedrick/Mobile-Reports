@@ -24,7 +24,7 @@ fun LoginScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Mobile Reports Login", style = MaterialTheme.typography.headlineSmall)
+        Text("Mobile Reports", style = MaterialTheme.typography.headlineSmall)
 
         Spacer(modifier = Modifier.height(16.dp))
 

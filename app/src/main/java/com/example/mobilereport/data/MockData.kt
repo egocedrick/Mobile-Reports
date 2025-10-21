@@ -105,4 +105,26 @@ object MockData {
             conductor = "Ramon Cruz"
         )
     )
+
+    // ✅ Added Expenses mock data
+    val expenses = listOf(
+        ExpenseItem(
+            date = "2025-10-07",
+            category = "Fuel",
+            amount = 3200.0,
+            notes = "Diesel refill BUS-101"
+        ),
+        ExpenseItem(
+            date = "2025-10-07",
+            category = "Maintenance",
+            amount = 850.0,
+            notes = "Brake pads BUS-202"
+        ),
+        ExpenseItem(
+            date = "2025-10-06",
+            category = "Supplies",
+            amount = 240.0,
+            notes = "Office supplies"
+        )
+    )
 }

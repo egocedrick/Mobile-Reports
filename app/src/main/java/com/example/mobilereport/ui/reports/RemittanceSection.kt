@@ -1,57 +1,70 @@
 package com.example.mobilereport.ui.reports
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
-import androidx.compose.material3.Text
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.mobilereport.data.MockData
-import com.example.mobilereport.model.RemittanceItem
+import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 
 @Composable
-fun RemittanceSection(modifier: Modifier = Modifier) {
-    Column(modifier = modifier.fillMaxWidth()) {
-        Text("Daily Remittance Summary", style = MaterialTheme.typography.titleSmall)
-        Spacer(modifier = Modifier.height(8.dp))
+fun RemittanceSection(
+    dateRange: Pair<LocalDate, LocalDate>?,
+    onDayClick: (LocalDate) -> Unit
+) {
+    if (dateRange == null) {
+        Text("Select a date range to view remittances.", style = MaterialTheme.typography.bodyMedium)
+        return
+    }
 
-        val total = MockData.remittances.sumOf { it.amountRemittance }
-        Card(modifier = Modifier.fillMaxWidth()) {
-            Column(modifier = Modifier.padding(12.dp)) {
-                Text("Total Amount Remitted: ₱${"%,.2f".format(total)}", style = MaterialTheme.typography.bodyLarge)
-            }
-        }
+    val (start, end) = dateRange
+    val days = daysBetweenInclusive(start, end)
 
-        Spacer(modifier = Modifier.height(8.dp))
+    Column(Modifier.fillMaxSize()) {
+        Text(
+            text = "Remittances from $start to $end",
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(16.dp)
+        )
 
-        LazyColumn(modifier = Modifier.fillMaxWidth()) {
-            items(MockData.remittances) { item: RemittanceItem ->
-                RemittanceRow(item)
-                Spacer(modifier = Modifier.height(8.dp))
+        LazyColumn(
+            modifier = Modifier.weight(1f).fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+        ) {
+            items(days) { date ->
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { onDayClick(date) }
+                ) {
+                    Row(
+                        modifier = Modifier.padding(16.dp).fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(date.toString(), style = MaterialTheme.typography.titleMedium)
+                        Spacer(Modifier.weight(1f))
+                        Text("₱${mockTotalFor(date)}", style = MaterialTheme.typography.titleMedium)
+                    }
+                }
             }
         }
     }
 }
 
-@Composable
-private fun RemittanceRow(item: RemittanceItem) {
-    Card(modifier = Modifier.fillMaxWidth()) {
-        Column(modifier = Modifier.padding(12.dp)) {
-            Text("${item.company} • ${item.vehicle} • ${item.route}", style = MaterialTheme.typography.titleSmall)
-            Spacer(modifier = Modifier.height(6.dp))
-            Text(
-                "Gross: ₱${"%,.2f".format(item.grossIncome)}  Net: ₱${"%,.2f".format(item.netCash)}  Remitted: ₱${"%,.2f".format(item.amountRemittance)}",
-                style = MaterialTheme.typography.bodyMedium
-            )
-            Spacer(modifier = Modifier.height(6.dp))
-            Text("Trips: ${item.trips}  KM: ${item.kmRun}  Liters Out: ${item.litersOut}", style = MaterialTheme.typography.bodySmall)
-            Spacer(modifier = Modifier.height(6.dp))
-            Text("Driver: ${item.driver}  Conductor: ${item.conductor}", style = MaterialTheme.typography.bodySmall)
-            Spacer(modifier = Modifier.height(6.dp))
-            Text("PAX A/S/St: ${item.paxAdult}/${item.paxSenior}/${item.paxStudent}  Baggage: ${item.baggageCount}", style = MaterialTheme.typography.bodySmall)
-        }
-    }
+private fun daysBetweenInclusive(start: LocalDate, end: LocalDate): List<LocalDate> {
+    val count = ChronoUnit.DAYS.between(start, end).toInt()
+    return (0..count).map { start.plusDays(it.toLong()) }
+}
+
+private fun mockTotalFor(date: LocalDate): Int {
+    val base = (date.dayOfMonth * 37) % 500
+    return 100 + base
 }

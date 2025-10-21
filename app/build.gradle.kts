@@ -40,10 +40,13 @@ android {
 }
 
 dependencies {
+    // ✅ Google Material Components (needed for MaterialDatePicker)
+    implementation("com.google.android.material:material:1.12.0")
+
     // Navigation
     implementation("androidx.navigation:navigation-compose:2.7.7")
 
-    // ✅ Compose BOM (latest for Material3 + pickers)
+    // Compose BOM
     implementation(platform("androidx.compose:compose-bom:2024.09.00"))
 
     // Core Compose UI
@@ -51,25 +54,22 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
 
-    // ✅ Material3 (no version, BOM handles it)
+    // Material3
     implementation("androidx.compose.material3:material3")
 
-    // Material Icons Extended (ExpandLess / ExpandMore)
+    // Material Icons Extended
     implementation("androidx.compose.material:material-icons-extended")
-
-    // Google Material Components (legacy views)
-    implementation("com.google.android.material:material:1.12.0")
 
     // AndroidX essentials
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
 
-    // ✅ DataStore (Preferences)
+    // DataStore
     implementation("androidx.datastore:datastore-preferences:1.1.1")
     implementation("androidx.datastore:datastore:1.1.1")
 
-    // ✅ Kotlin Coroutines (needed for Flow + suspend)
+    // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 

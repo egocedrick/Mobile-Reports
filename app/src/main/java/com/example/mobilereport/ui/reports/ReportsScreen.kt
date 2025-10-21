@@ -7,23 +7,33 @@ import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.example.mobilereport.ui.reports.comments.SectionWithDate
+import androidx.navigation.NavController
+import java.text.SimpleDateFormat
+import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReportsScreen(
     isDarkMode: Boolean,
-    onToggleTheme: () -> Unit
+    onToggleTheme: () -> Unit,
+    navController: NavController
 ) {
-    var remittanceExpanded by remember { mutableStateOf(true) }
-    var dispatcherExpanded by remember { mutableStateOf(false) }
-    var inspectorExpanded by remember { mutableStateOf(false) }
+    // State for showing DatePicker
+    var showDatePicker by remember { mutableStateOf(false) }
+    var selectedRoute by remember { mutableStateOf<String?>(null) }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Mobile Reports") },
+                title = {
+                    Text(
+                        "Mobile Reports",
+                        style = MaterialTheme.typography.headlineLarge,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                },
                 actions = {
                     IconButton(onClick = onToggleTheme) {
                         Icon(
@@ -39,55 +49,76 @@ fun ReportsScreen(
             modifier = Modifier
                 .padding(padding)
                 .fillMaxSize()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(24.dp)
+                .padding(24.dp),
+            verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
             Text(
-                "Reports",
-                style = MaterialTheme.typography.headlineMedium
+                "DASHBOARD",
+                style = MaterialTheme.typography.headlineMedium,
+                color = MaterialTheme.colorScheme.primary,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
             )
 
-            // Remittance Section
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                elevation = CardDefaults.cardElevation(4.dp)
-            ) {
-                SectionWithDate(
-                    title = "Remittance",
-                    expanded = remittanceExpanded,
-                    onToggle = { remittanceExpanded = !remittanceExpanded }
-                ) {
-                    RemittanceSection()
-                }
-            }
+            Button(
+                onClick = {
+                    selectedRoute = "remittanceDetail"
+                    showDatePicker = true
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) { Text("Remittance") }
 
-            // Dispatcher Section
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                elevation = CardDefaults.cardElevation(4.dp)
-            ) {
-                SectionWithDate(
-                    title = "Dispatcher",
-                    expanded = dispatcherExpanded,
-                    onToggle = { dispatcherExpanded = !dispatcherExpanded }
-                ) {
-                    DispatcherSection()
-                }
-            }
+            Button(
+                onClick = {
+                    selectedRoute = "dispatcherDetail"
+                    showDatePicker = true
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) { Text("Dispatcher") }
 
-            // Inspector Section
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                elevation = CardDefaults.cardElevation(4.dp)
-            ) {
-                SectionWithDate(
-                    title = "Inspector",
-                    expanded = inspectorExpanded,
-                    onToggle = { inspectorExpanded = !inspectorExpanded }
-                ) {
-                    InspectorSection()
-                }
+            Button(
+                onClick = {
+                    selectedRoute = "inspectorDetail"
+                    showDatePicker = true
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) { Text("Inspector") }
+
+            Button(
+                onClick = {
+                    selectedRoute = "expensesDetail"
+                    showDatePicker = true
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) { Text("Expenses") }
+        }
+    }
+
+    // DatePickerDialog with default = today
+    if (showDatePicker && selectedRoute != null) {
+        val today = System.currentTimeMillis()
+        val datePickerState = rememberDatePickerState(initialSelectedDateMillis = today)
+
+        DatePickerDialog(
+            onDismissRequest = { showDatePicker = false },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        val millis = datePickerState.selectedDateMillis
+                        if (millis != null) {
+                            val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                            val dateString = formatter.format(Date(millis))
+                            navController.navigate("${selectedRoute}/$dateString")
+                        }
+                        showDatePicker = false
+                    }
+                ) { Text("OK") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDatePicker = false }) { Text("Cancel") }
             }
+        ) {
+            DatePicker(state = datePickerState)
         }
     }
 }

@@ -15,43 +15,64 @@ import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
 @Composable
-fun DispatcherSection(
+fun ExpensesSection(
     dateRange: Pair<LocalDate, LocalDate>?,
     onDayClick: (LocalDate) -> Unit
 ) {
     if (dateRange == null) {
-        Text("Select a date range to view dispatcher reports.", style = MaterialTheme.typography.bodyMedium)
+        Text("Select a date range to view expenses.", style = MaterialTheme.typography.bodyMedium)
         return
     }
 
     val (start, end) = dateRange
     val days = daysBetweenInclusive(start, end)
 
-    Column(Modifier.fillMaxSize()) {
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        // Header
         Text(
-            text = "Dispatcher reports from $start to $end",
+            text = "Expenses from $start to $end",
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.padding(16.dp)
         )
 
+        // Scrollable list
         LazyColumn(
-            modifier = Modifier.weight(1f).fillMaxWidth(),
+            modifier = Modifier
+                .weight(1f) // 🔑 bounded height
+                .fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(12.dp),
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
         ) {
             items(days) { date ->
+                val mockTotal = mockTotalFor(date)
+
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable { onDayClick(date) }
                 ) {
                     Row(
-                        modifier = Modifier.padding(16.dp).fillMaxWidth(),
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(date.toString(), style = MaterialTheme.typography.titleMedium)
-                        Spacer(Modifier.weight(1f))
-                        Text("₱${mockTotalFor(date)}", style = MaterialTheme.typography.titleMedium)
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = date.toString(),
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                            Text(
+                                text = "Total expenses",
+                                style = MaterialTheme.typography.bodySmall
+                            )
+                        }
+                        Text(
+                            text = "₱$mockTotal",
+                            style = MaterialTheme.typography.titleMedium
+                        )
                     }
                 }
             }
@@ -65,6 +86,6 @@ private fun daysBetweenInclusive(start: LocalDate, end: LocalDate): List<LocalDa
 }
 
 private fun mockTotalFor(date: LocalDate): Int {
-    val base = (date.dayOfMonth * 41) % 600
-    return 150 + base
+    val base = (date.dayOfMonth * 37) % 500
+    return 100 + base
 }

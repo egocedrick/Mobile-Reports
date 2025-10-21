@@ -13,8 +13,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentActivity
 import com.google.android.material.datepicker.MaterialDatePicker
-import java.text.SimpleDateFormat
-import java.util.*
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
 
 // Helper to unwrap context safely
 private tailrec fun Context.findActivity(): FragmentActivity? = when (this) {
@@ -26,28 +27,28 @@ private tailrec fun Context.findActivity(): FragmentActivity? = when (this) {
 @Composable
 fun DateRangePickerSection(
     title: String,
-    onDateRangeSelected: (String, String) -> Unit
+    onDateRangeSelected: (LocalDate, LocalDate) -> Unit
 ) {
-    var startDate by remember { mutableStateOf("Start Date") }
-    var endDate by remember { mutableStateOf("End Date") }
+    var startDate by remember { mutableStateOf<LocalDate?>(null) }
+    var endDate by remember { mutableStateOf<LocalDate?>(null) }
     val context = LocalContext.current
 
-    // 🔑 Extracted picker logic para reusable sa Start at End
     fun openDateRangePicker() {
         val activity = context.findActivity()
         if (activity != null) {
             val picker = MaterialDatePicker.Builder.dateRangePicker()
-                .setTitleText("Select dates")
+                .setTitleText("Select date range")
                 .build()
 
             picker.addOnPositiveButtonClickListener { range ->
                 val start = range.first
                 val end = range.second
                 if (start != null && end != null) {
-                    val fmt = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                    startDate = fmt.format(Date(start))
-                    endDate = fmt.format(Date(end))
-                    onDateRangeSelected(startDate, endDate)
+                    val startLocal = Instant.ofEpochMilli(start).atZone(ZoneId.systemDefault()).toLocalDate()
+                    val endLocal = Instant.ofEpochMilli(end).atZone(ZoneId.systemDefault()).toLocalDate()
+                    startDate = startLocal
+                    endDate = endLocal
+                    onDateRangeSelected(startLocal, endLocal)
                 }
             }
 
@@ -60,36 +61,39 @@ fun DateRangePickerSection(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp), // 🔑 more breathing room
+            .padding(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Text(title, style = MaterialTheme.typography.titleMedium)
+        Text(
+            text = title,
+            style = MaterialTheme.typography.bodyMedium
+        )
 
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             OutlinedTextField(
-                value = startDate,
+                value = startDate?.toString() ?: "Start Date",
                 onValueChange = {},
                 label = { Text("Start Date") },
                 modifier = Modifier.weight(1f),
                 readOnly = true,
                 trailingIcon = {
                     IconButton(onClick = { openDateRangePicker() }) {
-                        Icon(Icons.Default.DateRange, contentDescription = "Pick date")
+                        Icon(Icons.Default.DateRange, contentDescription = "Pick start date")
                     }
                 }
             )
             OutlinedTextField(
-                value = endDate,
+                value = endDate?.toString() ?: "End Date",
                 onValueChange = {},
                 label = { Text("End Date") },
                 modifier = Modifier.weight(1f),
                 readOnly = true,
                 trailingIcon = {
                     IconButton(onClick = { openDateRangePicker() }) {
-                        Icon(Icons.Default.DateRange, contentDescription = "Pick date")
+                        Icon(Icons.Default.DateRange, contentDescription = "Pick end date")
                     }
                 }
             )

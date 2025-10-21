@@ -11,11 +11,11 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val LightColors = lightColorScheme(
-    primary = BluePrimary,
+    primary = GreenPrimary,
     onPrimary = androidx.compose.ui.graphics.Color.White,
-    secondary = BlueSecondary,
+    secondary = GreenSecondary,
     onSecondary = androidx.compose.ui.graphics.Color.White,
-    tertiary = BlueTertiary,
+    tertiary = GreenTertiary,
     onTertiary = androidx.compose.ui.graphics.Color.White,
     background = GrayBackground,
     onBackground = androidx.compose.ui.graphics.Color.Black,
@@ -29,11 +29,11 @@ private val LightColors = lightColorScheme(
 )
 
 private val DarkColors = darkColorScheme(
-    primary = BlueSecondary,
+    primary = GreenSecondary,
     onPrimary = androidx.compose.ui.graphics.Color.Black,
-    secondary = BlueTertiary,
+    secondary = GreenTertiary,
     onSecondary = androidx.compose.ui.graphics.Color.Black,
-    tertiary = BluePrimary,
+    tertiary = GreenPrimary,
     onTertiary = androidx.compose.ui.graphics.Color.White,
     background = DarkBackground,
     onBackground = androidx.compose.ui.graphics.Color.White,

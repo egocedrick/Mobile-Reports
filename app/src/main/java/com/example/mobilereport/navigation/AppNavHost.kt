@@ -48,43 +48,53 @@ fun AppNavHost(
             )
         }
 
-        // 🔑 Main Screens
-        composable("remittanceMain") { RemittanceMainScreen(navController) }
-        composable("dispatcherMain") { DispatcherMainScreen(navController) }
-        composable("inspectorMain") { InspectorMainScreen(navController) }
-        composable("expensesMain") { ExpensesMainScreen(navController) }
-
-        // 🔑 Detail Screens (with date argument)
+        // 🔑 Detail Screens (with date range arguments)
         composable(
-            route = "remittanceDetail/{date}",
-            arguments = listOf(navArgument("date") { defaultValue = "" })
+            route = "remittanceDetail/{startDate}/{endDate}",
+            arguments = listOf(
+                navArgument("startDate") { defaultValue = "" },
+                navArgument("endDate") { defaultValue = "" }
+            )
         ) { backStackEntry ->
-            val date = backStackEntry.arguments?.getString("date") ?: ""
-            RemittanceDetailScreen(date, navController)
+            val start = backStackEntry.arguments?.getString("startDate") ?: ""
+            val end = backStackEntry.arguments?.getString("endDate") ?: ""
+            RemittanceDetailScreen(start, end, navController)
         }
 
         composable(
-            route = "dispatcherDetail/{date}",
-            arguments = listOf(navArgument("date") { defaultValue = "" })
+            route = "dispatcherDetail/{startDate}/{endDate}",
+            arguments = listOf(
+                navArgument("startDate") { defaultValue = "" },
+                navArgument("endDate") { defaultValue = "" }
+            )
         ) { backStackEntry ->
-            val date = backStackEntry.arguments?.getString("date") ?: ""
-            DispatcherDetailScreen(date, navController)
+            val start = backStackEntry.arguments?.getString("startDate") ?: ""
+            val end = backStackEntry.arguments?.getString("endDate") ?: ""
+            DispatcherDetailScreen(start, end, navController)
         }
 
         composable(
-            route = "inspectorDetail/{date}",
-            arguments = listOf(navArgument("date") { defaultValue = "" })
+            route = "inspectorDetail/{startDate}/{endDate}",
+            arguments = listOf(
+                navArgument("startDate") { defaultValue = "" },
+                navArgument("endDate") { defaultValue = "" }
+            )
         ) { backStackEntry ->
-            val date = backStackEntry.arguments?.getString("date") ?: ""
-            InspectorDetailScreen(date, navController)
+            val start = backStackEntry.arguments?.getString("startDate") ?: ""
+            val end = backStackEntry.arguments?.getString("endDate") ?: ""
+            InspectorDetailScreen(start, end, navController)
         }
 
         composable(
-            route = "expensesDetail/{date}",
-            arguments = listOf(navArgument("date") { defaultValue = "" })
+            route = "expensesDetail/{startDate}/{endDate}",
+            arguments = listOf(
+                navArgument("startDate") { defaultValue = "" },
+                navArgument("endDate") { defaultValue = "" }
+            )
         ) { backStackEntry ->
-            val date = backStackEntry.arguments?.getString("date") ?: ""
-            ExpensesDetailScreen(date, navController)
+            val start = backStackEntry.arguments?.getString("startDate") ?: ""
+            val end = backStackEntry.arguments?.getString("endDate") ?: ""
+            ExpensesDetailScreen(start, end, navController)
         }
     }
 }

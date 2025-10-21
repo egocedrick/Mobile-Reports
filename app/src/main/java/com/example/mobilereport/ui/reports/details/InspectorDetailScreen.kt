@@ -15,14 +15,15 @@ import com.example.mobilereport.model.InspectorItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InspectorDetailScreen(date: String, navController: NavController) {
-    val items = MockData.inspectors.filter { it.date == date }
+fun InspectorDetailScreen(startDate: String, endDate: String, navController: NavController) {
+    // Filter items within range
+    val items = MockData.inspectors.filter { it.date in startDate..endDate }
     val totalPassengers = items.sumOf { it.numPassengers }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Inspector Detail — $date") },
+                title = { Text("Inspector Detail — $startDate to $endDate") },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
@@ -40,7 +41,7 @@ fun InspectorDetailScreen(date: String, navController: NavController) {
         ) {
             item {
                 Text(
-                    "Passengers: $totalPassengers",
+                    "Passengers (from $startDate to $endDate): $totalPassengers",
                     style = MaterialTheme.typography.headlineSmall
                 )
             }

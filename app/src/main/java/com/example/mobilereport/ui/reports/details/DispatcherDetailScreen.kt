@@ -15,15 +15,16 @@ import com.example.mobilereport.model.DispatcherItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DispatcherDetailScreen(date: String, navController: NavController) {
-    val items = MockData.dispatches.filter { it.date == date }
+fun DispatcherDetailScreen(startDate: String, endDate: String, navController: NavController) {
+    // Filter items within range
+    val items = MockData.dispatches.filter { it.date in startDate..endDate }
     val totalDispatch = items.count { it.type == "D" }
     val totalReverse = items.count { it.type == "R" }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Dispatcher Detail — $date") },
+                title = { Text("Dispatcher Detail — $startDate to $endDate") },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(Icons.Filled.ArrowBack, contentDescription = "Back")

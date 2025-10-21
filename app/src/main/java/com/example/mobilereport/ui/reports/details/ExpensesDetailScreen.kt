@@ -16,14 +16,15 @@ import com.example.mobilereport.ui.reports.ExpensesRow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ExpensesDetailScreen(date: String, navController: NavController) {
-    val items: List<ExpenseItem> = MockData.expenses.filter { it.date == date }
+fun ExpensesDetailScreen(startDate: String, endDate: String, navController: NavController) {
+    // Filter items within range
+    val items: List<ExpenseItem> = MockData.expenses.filter { it.date in startDate..endDate }
     val total = items.sumOf { it.amount }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Expenses Detail — $date") },
+                title = { Text("Expenses Detail — $startDate to $endDate") },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
@@ -41,7 +42,7 @@ fun ExpensesDetailScreen(date: String, navController: NavController) {
         ) {
             item {
                 Text(
-                    "Total for $date: ₱${"%,.2f".format(total)}",
+                    "Total from $startDate to $endDate: ₱${"%,.2f".format(total)}",
                     style = MaterialTheme.typography.headlineSmall
                 )
             }

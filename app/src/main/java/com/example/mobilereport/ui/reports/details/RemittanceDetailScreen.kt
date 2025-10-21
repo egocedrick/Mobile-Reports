@@ -15,14 +15,15 @@ import com.example.mobilereport.ui.reports.RemittanceRow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RemittanceDetailScreen(date: String, navController: NavController) {
-    val items = MockData.remittances.filter { it.dateRequested == date }
+fun RemittanceDetailScreen(startDate: String, endDate: String, navController: NavController) {
+    // Filter items within range
+    val items = MockData.remittances.filter { it.dateRequested in startDate..endDate }
     val total = items.sumOf { it.amountRemittance }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Remittance Detail — $date") },
+                title = { Text("Remittance Detail — $startDate to $endDate") },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
@@ -40,7 +41,7 @@ fun RemittanceDetailScreen(date: String, navController: NavController) {
         ) {
             item {
                 Text(
-                    "Total for $date: ₱${"%,.2f".format(total)}",
+                    "Total from $startDate to $endDate: ₱${"%,.2f".format(total)}",
                     style = MaterialTheme.typography.headlineSmall
                 )
             }

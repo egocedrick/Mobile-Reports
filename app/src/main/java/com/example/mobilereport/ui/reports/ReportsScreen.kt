@@ -20,9 +20,11 @@ fun ReportsScreen(
     onToggleTheme: () -> Unit,
     navController: NavController
 ) {
-    // State for showing DatePicker
-    var showDatePicker by remember { mutableStateOf(false) }
+    var showStartPicker by remember { mutableStateOf(false) }
+    var showEndPicker by remember { mutableStateOf(false) }
     var selectedRoute by remember { mutableStateOf<String?>(null) }
+    var startDate by remember { mutableStateOf<String?>(null) }
+    var endDate by remember { mutableStateOf<String?>(null) }
 
     Scaffold(
         topBar = {
@@ -63,7 +65,7 @@ fun ReportsScreen(
             Button(
                 onClick = {
                     selectedRoute = "remittanceDetail"
-                    showDatePicker = true
+                    showStartPicker = true
                 },
                 modifier = Modifier.fillMaxWidth()
             ) { Text("Remittance") }
@@ -71,7 +73,7 @@ fun ReportsScreen(
             Button(
                 onClick = {
                     selectedRoute = "dispatcherDetail"
-                    showDatePicker = true
+                    showStartPicker = true
                 },
                 modifier = Modifier.fillMaxWidth()
             ) { Text("Dispatcher") }
@@ -79,7 +81,7 @@ fun ReportsScreen(
             Button(
                 onClick = {
                     selectedRoute = "inspectorDetail"
-                    showDatePicker = true
+                    showStartPicker = true
                 },
                 modifier = Modifier.fillMaxWidth()
             ) { Text("Inspector") }
@@ -87,38 +89,84 @@ fun ReportsScreen(
             Button(
                 onClick = {
                     selectedRoute = "expensesDetail"
-                    showDatePicker = true
+                    showStartPicker = true
                 },
                 modifier = Modifier.fillMaxWidth()
             ) { Text("Expenses") }
         }
     }
 
-    // DatePickerDialog with default = today
-    if (showDatePicker && selectedRoute != null) {
+    // Start Date Picker
+    if (showStartPicker && selectedRoute != null) {
         val today = System.currentTimeMillis()
         val datePickerState = rememberDatePickerState(initialSelectedDateMillis = today)
 
         DatePickerDialog(
-            onDismissRequest = { showDatePicker = false },
+            onDismissRequest = { showStartPicker = false },
             confirmButton = {
-                TextButton(
-                    onClick = {
-                        val millis = datePickerState.selectedDateMillis
-                        if (millis != null) {
-                            val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                            val dateString = formatter.format(Date(millis))
-                            navController.navigate("${selectedRoute}/$dateString")
-                        }
-                        showDatePicker = false
+                TextButton(onClick = {
+                    val millis = datePickerState.selectedDateMillis
+                    if (millis != null) {
+                        val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                        startDate = formatter.format(Date(millis))
+                        showStartPicker = false
+                        showEndPicker = true // proceed to end date
                     }
-                ) { Text("OK") }
+                }) { Text("Next") }
             },
             dismissButton = {
-                TextButton(onClick = { showDatePicker = false }) { Text("Cancel") }
+                TextButton(onClick = { showStartPicker = false }) { Text("Cancel") }
             }
         ) {
-            DatePicker(state = datePickerState)
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Text(
+                    "Select Start Date",
+                    style = MaterialTheme.typography.titleMedium,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                DatePicker(state = datePickerState)
+            }
+        }
+    }
+
+    // End Date Picker
+    if (showEndPicker && selectedRoute != null && startDate != null) {
+        val today = System.currentTimeMillis()
+        val datePickerState = rememberDatePickerState(initialSelectedDateMillis = today)
+
+        DatePickerDialog(
+            onDismissRequest = { showEndPicker = false },
+            confirmButton = {
+                TextButton(onClick = {
+                    val millis = datePickerState.selectedDateMillis
+                    if (millis != null) {
+                        val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                        endDate = formatter.format(Date(millis))
+                        navController.navigate("${selectedRoute}/${startDate}/${endDate}")
+                    }
+                    showEndPicker = false
+                }) { Text("OK") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showEndPicker = false }) { Text("Cancel") }
+            }
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Text(
+                    "Select End Date",
+                    style = MaterialTheme.typography.titleMedium,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                DatePicker(state = datePickerState)
+            }
         }
     }
 }

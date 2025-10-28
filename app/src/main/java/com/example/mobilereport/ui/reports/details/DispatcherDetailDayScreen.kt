@@ -1,8 +1,10 @@
 package com.example.mobilereport.ui.reports.details
 
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
@@ -42,40 +44,47 @@ fun DispatcherDetailDayScreen(
                 .padding(padding)
                 .padding(16.dp)
         ) {
-            // Inclusive range + date
             Text("Date: $date", style = MaterialTheme.typography.titleMedium)
             Text("Report Range: $startDate to $endDate", style = MaterialTheme.typography.bodyMedium)
             Spacer(Modifier.height(12.dp))
 
-            // Header row with equal weights
-            Row(Modifier.fillMaxWidth()) {
-                Text("BUS", Modifier.weight(1f), style = MaterialTheme.typography.titleSmall)
-                Text("Time", Modifier.weight(1f), style = MaterialTheme.typography.titleSmall)
-                Text("Dispatch", Modifier.weight(1f), style = MaterialTheme.typography.titleSmall)
-                Text("Conductor", Modifier.weight(1f), style = MaterialTheme.typography.titleSmall)
-                Text("Driver", Modifier.weight(1f), style = MaterialTheme.typography.titleSmall)
-            }
-            Divider()
-
-            // Body rows
-            LazyColumn(
-                modifier = Modifier.weight(1f, fill = false),
-                verticalArrangement = Arrangement.spacedBy(2.dp)
+            // ✅ Horizontal scroll wrapper
+            Row(
+                modifier = Modifier
+                    .horizontalScroll(rememberScrollState())
+                    .fillMaxWidth()
             ) {
-                items(itemsForDay) { d: DispatcherItem ->
-                    Row(Modifier.fillMaxWidth()) {
-                        Text(d.busNumber, Modifier.weight(1f), style = MaterialTheme.typography.bodySmall)
-                        Text(d.time, Modifier.weight(1f), style = MaterialTheme.typography.bodySmall)
-                        Text(d.dispatcher, Modifier.weight(1f), style = MaterialTheme.typography.bodySmall)
-                        Text(d.conductor, Modifier.weight(1f), style = MaterialTheme.typography.bodySmall)
-                        Text(d.driver, Modifier.weight(1f), style = MaterialTheme.typography.bodySmall)
+                Column {
+                    // Header row
+                    Row {
+                        Text("BUS", Modifier.width(120.dp), style = MaterialTheme.typography.titleSmall)
+                        Text("Time", Modifier.width(120.dp), style = MaterialTheme.typography.titleSmall)
+                        Text("Dispatch", Modifier.width(120.dp), style = MaterialTheme.typography.titleSmall)
+                        Text("Conductor", Modifier.width(120.dp), style = MaterialTheme.typography.titleSmall)
+                        Text("Driver", Modifier.width(120.dp), style = MaterialTheme.typography.titleSmall)
+                    }
+                    Divider()
+
+                    // Body rows
+                    LazyColumn(
+                        modifier = Modifier.heightIn(max = 400.dp), // limit height, scrollable
+                        verticalArrangement = Arrangement.spacedBy(2.dp)
+                    ) {
+                        items(itemsForDay) { d: DispatcherItem ->
+                            Row {
+                                Text(d.busNumber, Modifier.width(120.dp), style = MaterialTheme.typography.bodySmall)
+                                Text(d.time, Modifier.width(120.dp), style = MaterialTheme.typography.bodySmall)
+                                Text(d.dispatcher, Modifier.width(120.dp), style = MaterialTheme.typography.bodySmall)
+                                Text(d.conductor, Modifier.width(120.dp), style = MaterialTheme.typography.bodySmall)
+                                Text(d.driver, Modifier.width(120.dp), style = MaterialTheme.typography.bodySmall)
+                            }
+                        }
                     }
                 }
             }
 
             Divider(Modifier.padding(vertical = 8.dp))
 
-            // Totals at the bottom
             Text(
                 "TOTAL Dispatch: $totalDispatch   Reverse: $totalReverse",
                 style = MaterialTheme.typography.titleMedium,

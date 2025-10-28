@@ -60,35 +60,36 @@ fun InspectorDetailScreen(startDate: String, endDate: String, navController: Nav
             }
             Divider()
 
-            // Body rows
+            // Body rows with divider in between
             LazyColumn(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(dailyTotals) { (date, total) ->
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                navController.navigate("inspectorNames/$date/$startDate/$endDate")
-                            }
-                            .padding(vertical = 4.dp)
-                    ) {
-                        Text(
-                            text = date.format(DateTimeFormatter.ofPattern("MMMM d, yyyy")),
-                            Modifier.weight(1f),
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                        Text(
-                            text = total.toString(),
-                            Modifier.weight(1f),
-                            style = MaterialTheme.typography.bodyMedium
-                        )
+                    Column {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    navController.navigate("inspectorNames/$date/$startDate/$endDate")
+                                }
+                                .padding(vertical = 4.dp)
+                        ) {
+                            Text(
+                                text = date.format(DateTimeFormatter.ofPattern("MMMM d, yyyy")),
+                                Modifier.weight(1f),
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                            Text(
+                                text = total.toString(),
+                                Modifier.weight(1f),
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
+                        Divider() // ✅ line between each date row
                     }
                 }
             }
-
-            Divider()
 
             // Grand total
             Text(

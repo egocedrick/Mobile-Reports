@@ -1,8 +1,10 @@
 package com.example.mobilereport.ui.reports.details
 
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
@@ -45,37 +47,44 @@ fun InspectorDetailDayScreen(
                 .padding(padding)
                 .padding(16.dp)
         ) {
-            // Header info
             Text("Date: $date", style = MaterialTheme.typography.titleMedium)
             Text("Inspector: $inspectorName", style = MaterialTheme.typography.bodyMedium)
             Text("Report Range: $startDate to $endDate", style = MaterialTheme.typography.bodySmall)
             Spacer(Modifier.height(12.dp))
 
-            // Table header
-            Row(Modifier.fillMaxWidth()) {
-                Text("BUS", Modifier.weight(1f), style = MaterialTheme.typography.titleSmall)
-                Text("Time", Modifier.weight(1f), style = MaterialTheme.typography.titleSmall)
-                Text("Discrepancy", Modifier.weight(1f), style = MaterialTheme.typography.titleSmall)
-            }
-            Divider()
-
-            // Table body
-            LazyColumn(
-                modifier = Modifier.weight(1f, fill = false),
-                verticalArrangement = Arrangement.spacedBy(2.dp)
+            // ✅ Horizontal scroll wrapper
+            Row(
+                modifier = Modifier
+                    .horizontalScroll(rememberScrollState())
+                    .fillMaxWidth()
             ) {
-                items(itemsForInspector) { item: InspectorItem ->
-                    Row(Modifier.fillMaxWidth()) {
-                        Text(item.busNumber, Modifier.weight(1f), style = MaterialTheme.typography.bodySmall)
-                        Text(item.time, Modifier.weight(1f), style = MaterialTheme.typography.bodySmall)
-                        Text(item.discrepancy.toString(), Modifier.weight(1f), style = MaterialTheme.typography.bodySmall)
+                Column {
+                    // Header row
+                    Row {
+                        Text("BUS", Modifier.width(120.dp), style = MaterialTheme.typography.titleSmall)
+                        Text("Time", Modifier.width(120.dp), style = MaterialTheme.typography.titleSmall)
+                        Text("Discrepancy", Modifier.width(120.dp), style = MaterialTheme.typography.titleSmall)
+                    }
+                    Divider()
+
+                    // Body rows
+                    LazyColumn(
+                        modifier = Modifier.heightIn(max = 400.dp),
+                        verticalArrangement = Arrangement.spacedBy(2.dp)
+                    ) {
+                        items(itemsForInspector) { item: InspectorItem ->
+                            Row {
+                                Text(item.busNumber, Modifier.width(120.dp), style = MaterialTheme.typography.bodySmall)
+                                Text(item.time, Modifier.width(120.dp), style = MaterialTheme.typography.bodySmall)
+                                Text(item.discrepancy.toString(), Modifier.width(120.dp), style = MaterialTheme.typography.bodySmall)
+                            }
+                        }
                     }
                 }
             }
 
             Divider(Modifier.padding(vertical = 8.dp))
 
-            // Totals
             Text(
                 "TOTAL Discrepancies: $totalDiscrepancies",
                 style = MaterialTheme.typography.titleMedium,

@@ -67,36 +67,36 @@ fun DispatcherDetailScreen(startDate: String, endDate: String, navController: Na
 
             Divider()
 
-            // Body rows
+            // Body rows with divider in between
             LazyColumn(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(dailyTotals) { (date, totals) ->
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                // ✅ Pass all three arguments
-                                navController.navigate("dispatcherDetailDay/${date}/${startDate}/${endDate}")
-                            }
-                            .padding(vertical = 4.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(
-                            text = date.format(DateTimeFormatter.ofPattern("MMMM d, yyyy")),
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                        Text(
-                            text = "${totals.first} / ${totals.second}",
-                            style = MaterialTheme.typography.bodyMedium,
-                            textAlign = TextAlign.End
-                        )
+                    Column {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    navController.navigate("dispatcherDetailDay/${date}/${startDate}/${endDate}")
+                                }
+                                .padding(vertical = 4.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(
+                                text = date.format(DateTimeFormatter.ofPattern("MMMM d, yyyy")),
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                            Text(
+                                text = "${totals.first} / ${totals.second}",
+                                style = MaterialTheme.typography.bodyMedium,
+                                textAlign = TextAlign.End
+                            )
+                        }
+                        Divider() // ✅ line between each date row
                     }
                 }
             }
-
-            Divider()
 
             // Grand totals
             Text(

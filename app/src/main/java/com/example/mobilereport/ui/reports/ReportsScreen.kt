@@ -1,5 +1,7 @@
 package com.example.mobilereport.ui.reports
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DarkMode
@@ -7,6 +9,7 @@ import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -26,12 +29,14 @@ fun ReportsScreen(
     var startDate by remember { mutableStateOf<String?>(null) }
     var endDate by remember { mutableStateOf<String?>(null) }
 
+    val context = LocalContext.current
+
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
                     Text(
-                        "Mobile Reports",
+                        "MOBILE REPORTS",
                         style = MaterialTheme.typography.headlineLarge,
                         color = MaterialTheme.colorScheme.primary
                     )
@@ -67,32 +72,54 @@ fun ReportsScreen(
                     selectedRoute = "remittanceDetail"
                     showStartPicker = true
                 },
-                modifier = Modifier.fillMaxWidth()
-            ) { Text("Remittance") }
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(60.dp)
+            ) { Text("REMITTANCE") }
 
             Button(
                 onClick = {
                     selectedRoute = "dispatcherDetail"
                     showStartPicker = true
                 },
-                modifier = Modifier.fillMaxWidth()
-            ) { Text("Dispatcher") }
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(60.dp)
+            ) { Text("DISPATCHER") }
 
             Button(
                 onClick = {
                     selectedRoute = "inspectorDetail"
                     showStartPicker = true
                 },
-                modifier = Modifier.fillMaxWidth()
-            ) { Text("Inspector") }
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(60.dp)
+            ) { Text("INSPECTOR") }
 
             Button(
                 onClick = {
                     selectedRoute = "expensesDetail"
                     showStartPicker = true
                 },
-                modifier = Modifier.fillMaxWidth()
-            ) { Text("Expenses") }
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(60.dp)
+            ) { Text("EXPENSES") }
+
+            // New Bus Location Dashboard button
+            Button(
+                onClick = {
+                    val intent = Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://wtracklite.vectras-inc.com/index.php")
+                    )
+                    context.startActivity(intent)
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(60.dp)
+            ) { Text("BUS LOCATION DASHBOARD") }
         }
     }
 
@@ -112,10 +139,10 @@ fun ReportsScreen(
                         showStartPicker = false
                         showEndPicker = true // proceed to end date
                     }
-                }) { Text("Next") }
+                }) { Text("NEXT") }
             },
             dismissButton = {
-                TextButton(onClick = { showStartPicker = false }) { Text("Cancel") }
+                TextButton(onClick = { showStartPicker = false }) { Text("CANCEL") }
             }
         ) {
             Column(
@@ -123,7 +150,7 @@ fun ReportsScreen(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 Text(
-                    "Select Start Date",
+                    "SELECT START DATE",
                     style = MaterialTheme.typography.titleMedium,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxWidth()
@@ -152,7 +179,7 @@ fun ReportsScreen(
                 }) { Text("OK") }
             },
             dismissButton = {
-                TextButton(onClick = { showEndPicker = false }) { Text("Cancel") }
+                TextButton(onClick = { showEndPicker = false }) { Text("CANCEL") }
             }
         ) {
             Column(
@@ -160,7 +187,7 @@ fun ReportsScreen(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 Text(
-                    "Select End Date",
+                    "SELECT END DATE",
                     style = MaterialTheme.typography.titleMedium,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxWidth()

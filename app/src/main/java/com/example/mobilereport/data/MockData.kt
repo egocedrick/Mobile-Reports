@@ -68,7 +68,8 @@ object MockData {
             driver = "Juan Dela Cruz",
             conductor = "Pedro Santos",
             dispatchTo = "Terminal A",
-            dispatchFrom = "Garage 1"
+            dispatchFrom = "Garage 1",
+            time = "06:30 AM"
         ),
         DispatcherItem(
             requestedDate = "2025-10-07",
@@ -79,11 +80,64 @@ object MockData {
             driver = "Maria Lopez",
             conductor = "Ramon Cruz",
             dispatchTo = "Terminal B",
-            dispatchFrom = "Garage 2"
+            dispatchFrom = "Garage 2",
+            time = "07:15 AM"
         )
     )
 
+    // Inspector entries with time and discrepancy for day-level tabular report
     val inspectors = listOf(
+        // October 1, 2025 – multiple inspectors and buses
+        InspectorItem(
+            requestedRange = "2025-10-01 — 2025-10-07",
+            date = "2025-10-01",
+            busNumber = "332",
+            numPassengers = 120,
+            kmPost = 45.2,
+            inspector = "Juan Dela Cruz",
+            driver = "D. Pororog",
+            conductor = "A. Castro",
+            time = "10:00 AM",
+            discrepancy = 0
+        ),
+        InspectorItem(
+            requestedRange = "2025-10-01 — 2025-10-07",
+            date = "2025-10-01",
+            busNumber = "234",
+            numPassengers = 98,
+            kmPost = 37.8,
+            inspector = "Juan Dela Cruz",
+            driver = "R. Bana",
+            conductor = "D. Castro",
+            time = "10:11 AM",
+            discrepancy = 0
+        ),
+        InspectorItem(
+            requestedRange = "2025-10-01 — 2025-10-07",
+            date = "2025-10-01",
+            busNumber = "324",
+            numPassengers = 140,
+            kmPost = 52.1,
+            inspector = "Juan Dela Cruz",
+            driver = "B. Santos",
+            conductor = "A. Santos",
+            time = "12:50 PM",
+            discrepancy = 2
+        ),
+        InspectorItem(
+            requestedRange = "2025-10-01 — 2025-10-07",
+            date = "2025-10-01",
+            busNumber = "111",
+            numPassengers = 110,
+            kmPost = 41.3,
+            inspector = "Ricardo D.",
+            driver = "D. Castro",
+            conductor = "D. Castro",
+            time = "11:15 AM",
+            discrepancy = 0
+        ),
+
+        // October 7, 2025 – sample entries
         InspectorItem(
             requestedRange = "2025-10-01 — 2025-10-07",
             date = "2025-10-07",
@@ -92,7 +146,9 @@ object MockData {
             kmPost = 145.5,
             inspector = "Inspector A",
             driver = "Juan Dela Cruz",
-            conductor = "Pedro Santos"
+            conductor = "Pedro Santos",
+            time = "09:40 AM",
+            discrepancy = 1
         ),
         InspectorItem(
             requestedRange = "2025-10-01 — 2025-10-07",
@@ -102,29 +158,44 @@ object MockData {
             kmPost = 98.0,
             inspector = "Inspector B",
             driver = "Maria Lopez",
-            conductor = "Ramon Cruz"
+            conductor = "Ramon Cruz",
+            time = "10:20 AM",
+            discrepancy = 0
         )
     )
 
-    // ✅ Added Expenses mock data
+    // Alias so existing screens using MockData.inspections compile without changing imports
+    val inspections: List<InspectorItem> = inspectors
+
+    // Expanded Expenses data for tabular reports
     val expenses = listOf(
-        ExpenseItem(
-            date = "2025-10-07",
-            category = "Fuel",
-            amount = 3200.0,
-            notes = "Diesel refill BUS-101"
-        ),
-        ExpenseItem(
-            date = "2025-10-07",
-            category = "Maintenance",
-            amount = 850.0,
-            notes = "Brake pads BUS-202"
-        ),
-        ExpenseItem(
-            date = "2025-10-06",
-            category = "Supplies",
-            amount = 240.0,
-            notes = "Office supplies"
-        )
-    )
+        // October 1, 2025 – multiple categories with many entries
+        // Toll Fee (10 entries)
+        *Array(10) { ExpensesItem("2025-10-01", "Toll Fee", 160.0) },
+
+        // Parking (9 entries)
+        *Array(9) { ExpensesItem("2025-10-01", "Parking", 100.0) },
+
+        // Washing (9 entries)
+        *Array(9) { ExpensesItem("2025-10-01", "Washing", 150.0) },
+
+        // Fuel-in (10 entries, mixed amounts)
+        ExpensesItem("2025-10-01", "Fuel-in", 250.0),
+        *Array(8) { ExpensesItem("2025-10-01", "Fuel-in", 200.0) },
+        ExpensesItem("2025-10-01", "Fuel-in", 210.0),
+
+        // BUS (7 entries)
+        ExpensesItem("2025-10-01", "BUS", 101.0),
+        ExpensesItem("2025-10-01", "BUS", 321.0),
+        ExpensesItem("2025-10-01", "BUS", 455.0),
+        ExpensesItem("2025-10-01", "BUS", 320.0),
+        ExpensesItem("2025-10-01", "BUS", 345.0),
+        ExpensesItem("2025-10-01", "BUS", 654.0),
+        ExpensesItem("2025-10-01", "BUS", 123.0),
+
+        // October 7, 2025 – sample simple entries
+        ExpensesItem("2025-10-07", "Fuel", 3200.0, notes = "Diesel refill BUS-101"),
+        ExpensesItem("2025-10-07", "Maintenance", 850.0, notes = "Brake pads BUS-202"),
+        ExpensesItem("2025-10-06", "Supplies", 240.0, notes = "Office supplies")
+    ).toList()
 }

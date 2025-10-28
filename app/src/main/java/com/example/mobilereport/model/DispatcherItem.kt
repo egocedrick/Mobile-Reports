@@ -9,5 +9,6 @@ data class DispatcherItem(
     val driver: String,
     val conductor: String,
     val dispatchTo: String,
-    val dispatchFrom: String
+    val dispatchFrom: String,
+    val time: String
 )

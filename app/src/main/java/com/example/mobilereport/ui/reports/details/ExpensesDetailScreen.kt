@@ -26,10 +26,20 @@ fun ExpensesDetailScreen(startDate: String, endDate: String, navController: NavC
 
     val days = daysBetweenInclusive(start, end)
 
-    // Totals per day
+    // Totals per day (if walang BUS entries, force 0.00)
     val dailyTotals = days.map { date ->
         val itemsForDay = MockData.expenses.filter { it.date == date.toString() }
-        val total = itemsForDay.sumOf { it.amount }
+
+        // ✅ Check kung may BUS entry sa araw na ito
+        val hasBus = itemsForDay.any { it.category == "BUS" }
+
+        val total = if (hasBus) {
+            // compute lahat ng expenses (excluding BUS amounts kasi bus number lang yun)
+            itemsForDay.filter { it.category != "BUS" }.sumOf { it.amount }
+        } else {
+            0.0
+        }
+
         date to total
     }
 
@@ -91,7 +101,7 @@ fun ExpensesDetailScreen(startDate: String, endDate: String, navController: NavC
                                 textAlign = TextAlign.End
                             )
                         }
-                        Divider() // ✅ line in between each date row
+                        Divider()
                     }
                 }
             }

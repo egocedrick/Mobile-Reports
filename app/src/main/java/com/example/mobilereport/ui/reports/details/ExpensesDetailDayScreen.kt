@@ -3,6 +3,8 @@ package com.example.mobilereport.ui.reports.details
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
@@ -22,7 +24,7 @@ fun ExpensesDetailDayScreen(
 ) {
     val expensesForDay = MockData.expenses.filter { it.date == date }
     val grouped = expensesForDay.groupBy { it.category }
-    val totalForDay = expensesForDay.sumOf { it.amount }
+    val totalForDay = expensesForDay.filter { it.category != "BUS" }.sumOf { it.amount }
 
     // Fixed categories in order
     val categories = listOf("BUS", "Fuel-in", "Washing", "Parking", "Toll Fee")
@@ -58,7 +60,7 @@ fun ExpensesDetailDayScreen(
                     .fillMaxWidth()
             ) {
                 Column {
-                    // Header row (categories)
+                    // Header row
                     Row(Modifier.padding(bottom = 4.dp)) {
                         categories.forEach { category ->
                             Text(
@@ -70,13 +72,18 @@ fun ExpensesDetailDayScreen(
                     }
                     Divider()
 
-                    // Data rows (entries per category)
+                    // Data rows
                     for (i in 0 until maxEntries) {
                         Row(Modifier.padding(vertical = 2.dp)) {
                             categories.forEach { category ->
-                                val value = grouped[category]?.getOrNull(i)?.amount?.toString() ?: ""
+                                val cellText = if (category == "BUS") {
+                                    // Show bus number as string
+                                    grouped[category]?.getOrNull(i)?.amount?.toInt()?.toString() ?: ""
+                                } else {
+                                    grouped[category]?.getOrNull(i)?.amount?.let { "%.2f".format(it) } ?: ""
+                                }
                                 Text(
-                                    value,
+                                    cellText,
                                     Modifier.width(100.dp),
                                     style = MaterialTheme.typography.bodySmall
                                 )
@@ -85,16 +92,20 @@ fun ExpensesDetailDayScreen(
                         Divider()
                     }
 
-                    // Totals row
+                    // Totals row (skip BUS)
                     Row(Modifier.padding(vertical = 4.dp)) {
                         categories.forEach { category ->
-                            val total = grouped[category]?.sumOf { it.amount } ?: 0.0
-                            Text(
-                                "%.2f".format(total),
-                                Modifier.width(100.dp),
-                                style = MaterialTheme.typography.titleMedium,
-                                color = MaterialTheme.colorScheme.primary
-                            )
+                            if (category == "BUS") {
+                                Text("", Modifier.width(100.dp))
+                            } else {
+                                val total = grouped[category]?.sumOf { it.amount } ?: 0.0
+                                Text(
+                                    "%.2f".format(total),
+                                    Modifier.width(100.dp),
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                            }
                         }
                     }
                 }
@@ -102,7 +113,7 @@ fun ExpensesDetailDayScreen(
 
             Spacer(Modifier.height(12.dp))
 
-            // Total for the day
+            // Total for the day (excluding BUS)
             Text(
                 "TOTAL Expenses: %.2f".format(totalForDay),
                 style = MaterialTheme.typography.headlineSmall,

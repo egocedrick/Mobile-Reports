@@ -11,6 +11,7 @@ object MockData {
             vehicle = "BUS-101",
             grossIncome = 8500.0,
             dateDispatched = "2025-10-07",
+            timeDispatched = "06:30 AM",   // ➕ bagong field
             dateRemitted = "2025-10-07",
             route = "A — B",
             driver = "Juan Dela Cruz",
@@ -37,6 +38,7 @@ object MockData {
             vehicle = "BUS-202",
             grossIncome = 5400.0,
             dateDispatched = "2025-10-07",
+            timeDispatched = "07:15 AM",   // ➕ bagong field
             dateRemitted = "2025-10-07",
             route = "C — D",
             driver = "Maria Lopez",
@@ -85,9 +87,8 @@ object MockData {
         )
     )
 
-    // Inspector entries with time and discrepancy for day-level tabular report
+    // Inspector entries with time, discrepancy, and remainingPassenger
     val inspectors = listOf(
-        // October 1, 2025 – multiple inspectors and buses
         InspectorItem(
             requestedRange = "2025-10-01 — 2025-10-07",
             date = "2025-10-01",
@@ -98,7 +99,8 @@ object MockData {
             driver = "D. Pororog",
             conductor = "A. Castro",
             time = "10:00 AM",
-            discrepancy = 0
+            discrepancy = 0,
+            remainingPassenger = 15
         ),
         InspectorItem(
             requestedRange = "2025-10-01 — 2025-10-07",
@@ -110,7 +112,8 @@ object MockData {
             driver = "R. Bana",
             conductor = "D. Castro",
             time = "10:11 AM",
-            discrepancy = 0
+            discrepancy = 0,
+            remainingPassenger = 12
         ),
         InspectorItem(
             requestedRange = "2025-10-01 — 2025-10-07",
@@ -122,7 +125,8 @@ object MockData {
             driver = "B. Santos",
             conductor = "A. Santos",
             time = "12:50 PM",
-            discrepancy = 2
+            discrepancy = 2,
+            remainingPassenger = 20
         ),
         InspectorItem(
             requestedRange = "2025-10-01 — 2025-10-07",
@@ -134,10 +138,9 @@ object MockData {
             driver = "D. Castro",
             conductor = "D. Castro",
             time = "11:15 AM",
-            discrepancy = 0
+            discrepancy = 0,
+            remainingPassenger = 8
         ),
-
-        // October 7, 2025 – sample entries
         InspectorItem(
             requestedRange = "2025-10-01 — 2025-10-07",
             date = "2025-10-07",
@@ -148,7 +151,8 @@ object MockData {
             driver = "Juan Dela Cruz",
             conductor = "Pedro Santos",
             time = "09:40 AM",
-            discrepancy = 1
+            discrepancy = 1,
+            remainingPassenger = 25
         ),
         InspectorItem(
             requestedRange = "2025-10-01 — 2025-10-07",
@@ -160,7 +164,8 @@ object MockData {
             driver = "Maria Lopez",
             conductor = "Ramon Cruz",
             time = "10:20 AM",
-            discrepancy = 0
+            discrepancy = 0,
+            remainingPassenger = 18
         )
     )
 
@@ -169,22 +174,12 @@ object MockData {
 
     // Expanded Expenses data for tabular reports
     val expenses = listOf(
-        // October 1, 2025 – multiple categories with many entries
-        // Toll Fee (10 entries)
         *Array(10) { ExpensesItem("2025-10-01", "Toll Fee", 160.0) },
-
-        // Parking (9 entries)
         *Array(9) { ExpensesItem("2025-10-01", "Parking", 100.0) },
-
-        // Washing (9 entries)
         *Array(9) { ExpensesItem("2025-10-01", "Washing", 150.0) },
-
-        // Fuel-in (10 entries, mixed amounts)
         ExpensesItem("2025-10-01", "Fuel-in", 250.0),
         *Array(8) { ExpensesItem("2025-10-01", "Fuel-in", 200.0) },
         ExpensesItem("2025-10-01", "Fuel-in", 210.0),
-
-        // BUS (7 entries)
         ExpensesItem("2025-10-01", "BUS", 101.0),
         ExpensesItem("2025-10-01", "BUS", 321.0),
         ExpensesItem("2025-10-01", "BUS", 455.0),
@@ -193,7 +188,6 @@ object MockData {
         ExpensesItem("2025-10-01", "BUS", 654.0),
         ExpensesItem("2025-10-01", "BUS", 123.0),
 
-        // October 7, 2025 – sample simple entries
         ExpensesItem("2025-10-07", "Fuel", 3200.0, notes = "Diesel refill BUS-101"),
         ExpensesItem("2025-10-07", "Maintenance", 850.0, notes = "Brake pads BUS-202"),
         ExpensesItem("2025-10-06", "Supplies", 240.0, notes = "Office supplies")

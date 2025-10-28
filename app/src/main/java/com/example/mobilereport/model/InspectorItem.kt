@@ -1,14 +1,15 @@
 package com.example.mobilereport.model
 
 data class InspectorItem(
-    val requestedRange: String,   // e.g., "2025-10-01 — 2025-10-07"
-    val date: String,             // specific date of inspection
-    val busNumber: String,        // bus identifier
-    val numPassengers: Int,       // passenger count (if applicable)
-    val kmPost: Double,           // kilometer post or distance marker
-    val inspector: String,        // inspector name
-    val driver: String,           // driver name
-    val conductor: String,        // conductor name
-    val time: String,             // ✅ new: inspection/arrival time (e.g., "10:00 AM")
-    val discrepancy: Int          // ✅ new: discrepancy count for this bus
+    val requestedRange: String,
+    val date: String,
+    val busNumber: String,
+    val numPassengers: Int,       // Actual Count
+    val kmPost: Double,           // KM
+    val inspector: String,
+    val driver: String,
+    val conductor: String,
+    val time: String,
+    val discrepancy: Int,
+    val remainingPassenger: Int = 0 // ➕ new field
 )

@@ -61,8 +61,11 @@ fun InspectorDetailDayScreen(
                 Column {
                     // Header row
                     Row {
-                        Text("BUS", Modifier.width(120.dp), style = MaterialTheme.typography.titleSmall)
-                        Text("Time", Modifier.width(120.dp), style = MaterialTheme.typography.titleSmall)
+                        Text("BUS", Modifier.width(100.dp), style = MaterialTheme.typography.titleSmall)
+                        Text("Time", Modifier.width(100.dp), style = MaterialTheme.typography.titleSmall)
+                        Text("KM", Modifier.width(100.dp), style = MaterialTheme.typography.titleSmall)
+                        Text("Remaining Passenger", Modifier.width(160.dp), style = MaterialTheme.typography.titleSmall)
+                        Text("Actual Count", Modifier.width(120.dp), style = MaterialTheme.typography.titleSmall)
                         Text("Discrepancy", Modifier.width(120.dp), style = MaterialTheme.typography.titleSmall)
                     }
                     Divider()
@@ -74,8 +77,11 @@ fun InspectorDetailDayScreen(
                     ) {
                         items(itemsForInspector) { item: InspectorItem ->
                             Row {
-                                Text(item.busNumber, Modifier.width(120.dp), style = MaterialTheme.typography.bodySmall)
-                                Text(item.time, Modifier.width(120.dp), style = MaterialTheme.typography.bodySmall)
+                                Text(item.busNumber, Modifier.width(100.dp), style = MaterialTheme.typography.bodySmall)
+                                Text(item.time, Modifier.width(100.dp), style = MaterialTheme.typography.bodySmall)
+                                Text(item.kmPost.toString(), Modifier.width(100.dp), style = MaterialTheme.typography.bodySmall)
+                                Text(item.remainingPassenger.toString(), Modifier.width(160.dp), style = MaterialTheme.typography.bodySmall)
+                                Text(item.numPassengers.toString(), Modifier.width(120.dp), style = MaterialTheme.typography.bodySmall)
                                 Text(item.discrepancy.toString(), Modifier.width(120.dp), style = MaterialTheme.typography.bodySmall)
                             }
                         }

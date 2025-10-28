@@ -1,12 +1,13 @@
 package com.example.mobilereport.model
 
 data class RemittanceItem(
-    val dateRequested: String,   // Date client wants to see
-    val company: String,         // mPAD or ErJohn
+    val dateRequested: String,
+    val company: String,
     val partialCommission: Double,
     val vehicle: String,
     val grossIncome: Double,
     val dateDispatched: String,
+    val timeDispatched: String,   // ➕ bagong field para sa oras
     val dateRemitted: String,
     val route: String,
     val driver: String,

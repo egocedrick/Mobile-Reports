@@ -12,25 +12,29 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.mobilereport.data.MockData
+import com.example.mobilereport.model.DispatcherItem
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DispatcherDetailScreen(startDate: String, endDate: String, navController: NavController) {
+fun DispatcherDetailScreen(
+    startDate: String,
+    endDate: String,
+    navController: NavController,
+    dispatches: List<DispatcherItem>
+) {
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     val start = LocalDate.parse(startDate, formatter)
     val end = LocalDate.parse(endDate, formatter)
 
     val days = daysBetweenInclusive(start, end)
 
-    // Totals per day
     val dailyTotals = days.map { date ->
-        val itemsForDay = MockData.dispatches.filter { it.date == date.toString() }
-        val totalDispatch = itemsForDay.count { it.type == "D" }
-        val totalReverse = itemsForDay.count { it.type == "R" }
+        val itemsForDay = dispatches.filter { it.date == date.toString() }
+        val totalDispatch = itemsForDay.count { it.dispatcher == "D" }
+        val totalReverse = itemsForDay.count { it.dispatcher == "R" }
         date to (totalDispatch to totalReverse)
     }
 
@@ -56,7 +60,7 @@ fun DispatcherDetailScreen(startDate: String, endDate: String, navController: Na
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            // Header row
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
@@ -67,7 +71,6 @@ fun DispatcherDetailScreen(startDate: String, endDate: String, navController: Na
 
             Divider()
 
-            // Body rows with divider in between
             LazyColumn(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -78,7 +81,9 @@ fun DispatcherDetailScreen(startDate: String, endDate: String, navController: Na
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable {
-                                    navController.navigate("dispatcherDetailDay/${date}/${startDate}/${endDate}")
+                                    navController.navigate(
+                                        "dispatcherDetailDay/$date/$startDate/$endDate"
+                                    )
                                 }
                                 .padding(vertical = 4.dp),
                             horizontalArrangement = Arrangement.SpaceBetween
@@ -93,12 +98,11 @@ fun DispatcherDetailScreen(startDate: String, endDate: String, navController: Na
                                 textAlign = TextAlign.End
                             )
                         }
-                        Divider() // ✅ line between each date row
+                        Divider()
                     }
                 }
             }
 
-            // Grand totals
             Text(
                 text = "TOTAL Dispatch: $grandDispatch   Reverse: $grandReverse",
                 style = MaterialTheme.typography.headlineSmall,

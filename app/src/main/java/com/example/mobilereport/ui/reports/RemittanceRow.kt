@@ -17,15 +17,26 @@ fun RemittanceRow(item: RemittanceItem) {
             .padding(vertical = 4.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text("Company: ${item.company}", style = MaterialTheme.typography.titleMedium)
-            Text("Vehicle: ${item.vehicle}", style = MaterialTheme.typography.bodyMedium)
-            Text("Route: ${item.route}", style = MaterialTheme.typography.bodyMedium)
-            Text("Driver: ${item.driver}", style = MaterialTheme.typography.bodySmall)
-            Text("Conductor: ${item.conductor}", style = MaterialTheme.typography.bodySmall)
+
+            Text("Bus: ${item.busNumber}", style = MaterialTheme.typography.titleMedium)
+
             Spacer(Modifier.height(4.dp))
+            Text("Time: ${item.time}", style = MaterialTheme.typography.bodyMedium)
+
+            Spacer(Modifier.height(4.dp))
+            Text("Trips: ${item.trips}", style = MaterialTheme.typography.bodyMedium)
+
+            Spacer(Modifier.height(4.dp))
+            Text("Net: ₱${"%,.2f".format(item.netCash.toDouble())}", style = MaterialTheme.typography.bodyMedium)
+
+            Spacer(Modifier.height(4.dp))
+            Text("Ingresso: ₱${"%,.2f".format(item.amountRemittance.toDouble())}", style = MaterialTheme.typography.bodyMedium)
+
+            Spacer(Modifier.height(8.dp))
             Text(
-                "Amount Remitted: ₱${"%,.2f".format(item.amountRemittance)}",
-                style = MaterialTheme.typography.bodyLarge
+                "Total Remitted: ₱${"%,.2f".format(item.amountRemittance.toDouble())}",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.primary
             )
         }
     }

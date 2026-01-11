@@ -59,6 +59,7 @@ fun ReportsScreen(
                 .padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
+
             Text(
                 "DASHBOARD",
                 style = MaterialTheme.typography.headlineMedium,
@@ -67,47 +68,43 @@ fun ReportsScreen(
                 modifier = Modifier.fillMaxWidth()
             )
 
+            // ✅ REMITTANCE
             Button(
                 onClick = {
                     selectedRoute = "remittanceDetail"
                     showStartPicker = true
                 },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp)
+                modifier = Modifier.fillMaxWidth().height(60.dp)
             ) { Text("REMITTANCE") }
 
+            // ✅ DISPATCHER
             Button(
                 onClick = {
                     selectedRoute = "dispatcherDetail"
                     showStartPicker = true
                 },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp)
+                modifier = Modifier.fillMaxWidth().height(60.dp)
             ) { Text("DISPATCHER") }
 
+            // ✅ INSPECTOR
             Button(
                 onClick = {
                     selectedRoute = "inspectorDetail"
                     showStartPicker = true
                 },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp)
+                modifier = Modifier.fillMaxWidth().height(60.dp)
             ) { Text("INSPECTOR") }
 
+            // ✅ EXPENSES
             Button(
                 onClick = {
                     selectedRoute = "expensesDetail"
                     showStartPicker = true
                 },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp)
+                modifier = Modifier.fillMaxWidth().height(60.dp)
             ) { Text("EXPENSES") }
 
-            // New Bus Location Dashboard button
+            // ✅ BUS LOCATION DASHBOARD
             Button(
                 onClick = {
                     val intent = Intent(
@@ -116,14 +113,12 @@ fun ReportsScreen(
                     )
                     context.startActivity(intent)
                 },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp)
+                modifier = Modifier.fillMaxWidth().height(60.dp)
             ) { Text("BUS LOCATION DASHBOARD") }
         }
     }
 
-    // Start Date Picker
+    // ✅ START DATE PICKER
     if (showStartPicker && selectedRoute != null) {
         val today = System.currentTimeMillis()
         val datePickerState = rememberDatePickerState(initialSelectedDateMillis = today)
@@ -137,7 +132,7 @@ fun ReportsScreen(
                         val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
                         startDate = formatter.format(Date(millis))
                         showStartPicker = false
-                        showEndPicker = true // proceed to end date
+                        showEndPicker = true
                     }
                 }) { Text("NEXT") }
             },
@@ -160,7 +155,7 @@ fun ReportsScreen(
         }
     }
 
-    // End Date Picker
+    // ✅ END DATE PICKER
     if (showEndPicker && selectedRoute != null && startDate != null) {
         val today = System.currentTimeMillis()
         val datePickerState = rememberDatePickerState(initialSelectedDateMillis = today)
@@ -173,6 +168,7 @@ fun ReportsScreen(
                     if (millis != null) {
                         val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
                         endDate = formatter.format(Date(millis))
+
                         navController.navigate("${selectedRoute}/${startDate}/${endDate}")
                     }
                     showEndPicker = false

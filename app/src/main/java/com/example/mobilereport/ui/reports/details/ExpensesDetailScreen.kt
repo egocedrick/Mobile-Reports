@@ -12,34 +12,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.mobilereport.data.MockData
+import com.example.mobilereport.model.ExpensesItem
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ExpensesDetailScreen(startDate: String, endDate: String, navController: NavController) {
+fun ExpensesDetailScreen(
+    startDate: String,
+    endDate: String,
+    navController: NavController,
+    expenses: List<ExpensesItem>
+) {
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     val start = LocalDate.parse(startDate, formatter)
     val end = LocalDate.parse(endDate, formatter)
 
     val days = daysBetweenInclusive(start, end)
 
-    // Totals per day (if walang BUS entries, force 0.00)
     val dailyTotals = days.map { date ->
-        val itemsForDay = MockData.expenses.filter { it.date == date.toString() }
-
-        // ✅ Check kung may BUS entry sa araw na ito
-        val hasBus = itemsForDay.any { it.category == "BUS" }
-
-        val total = if (hasBus) {
-            // compute lahat ng expenses (excluding BUS amounts kasi bus number lang yun)
-            itemsForDay.filter { it.category != "BUS" }.sumOf { it.amount }
-        } else {
-            0.0
-        }
-
+        val itemsForDay = expenses.filter { it.date == date.toString() }
+        val total = itemsForDay.sumOf { it.totalExpenses }
         date to total
     }
 
@@ -57,6 +51,7 @@ fun ExpensesDetailScreen(startDate: String, endDate: String, navController: NavC
             )
         }
     ) { padding ->
+
         Column(
             modifier = Modifier
                 .padding(padding)
@@ -64,7 +59,7 @@ fun ExpensesDetailScreen(startDate: String, endDate: String, navController: NavC
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            // Header row
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
@@ -75,18 +70,20 @@ fun ExpensesDetailScreen(startDate: String, endDate: String, navController: NavC
 
             Divider()
 
-            // Body rows
             LazyColumn(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(dailyTotals) { (date, total) ->
+
                     Column {
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable {
-                                    navController.navigate("expensesDetailDay/${date}/${startDate}/${endDate}")
+                                    navController.navigate(
+                                        "expensesDetailDay/$date/$startDate/$endDate"
+                                    )
                                 }
                                 .padding(vertical = 4.dp),
                             horizontalArrangement = Arrangement.SpaceBetween
@@ -96,7 +93,7 @@ fun ExpensesDetailScreen(startDate: String, endDate: String, navController: NavC
                                 style = MaterialTheme.typography.bodyMedium
                             )
                             Text(
-                                text = "%.2f".format(total),
+                                text = "₱${"%,.2f".format(total)}",
                                 style = MaterialTheme.typography.bodyMedium,
                                 textAlign = TextAlign.End
                             )
@@ -106,9 +103,8 @@ fun ExpensesDetailScreen(startDate: String, endDate: String, navController: NavC
                 }
             }
 
-            // Grand total
             Text(
-                text = "TOTAL Expenses: %.2f".format(grandTotal),
+                text = "TOTAL Expenses: ₱${"%,.2f".format(grandTotal)}",
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.primary
             )

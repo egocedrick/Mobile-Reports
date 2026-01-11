@@ -12,25 +12,29 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.mobilereport.data.MockData
+import com.example.mobilereport.model.RemittanceItem
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RemittanceDetailScreen(startDate: String, endDate: String, navController: NavController) {
+fun RemittanceDetailScreen(
+    startDate: String,
+    endDate: String,
+    navController: NavController,
+    remittances: List<RemittanceItem>
+) {
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     val start = LocalDate.parse(startDate, formatter)
     val end = LocalDate.parse(endDate, formatter)
 
     val days = daysBetweenInclusive(start, end)
 
-    // Compute totals per day
     val dailyTotals = days.map { date ->
-        val itemsForDay = MockData.remittances.filter { it.dateRequested == date.toString() }
-        val totalForDay = itemsForDay.sumOf { it.amountRemittance }
-        date to totalForDay
+        val itemsForDay = remittances.filter { it.date == date.toString() }
+        val total = itemsForDay.sumOf { it.amountRemittance }
+        date to total
     }
 
     val grandTotal = dailyTotals.sumOf { it.second }
@@ -47,6 +51,7 @@ fun RemittanceDetailScreen(startDate: String, endDate: String, navController: Na
             )
         }
     ) { padding ->
+
         Column(
             modifier = Modifier
                 .padding(padding)
@@ -54,29 +59,29 @@ fun RemittanceDetailScreen(startDate: String, endDate: String, navController: Na
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            // Header row
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text("Date", style = MaterialTheme.typography.titleMedium)
-                Text("Amount", style = MaterialTheme.typography.titleMedium)
+                Text("Ingresso", style = MaterialTheme.typography.titleMedium)
             }
 
             Divider()
 
-            // Body rows with divider in between
             LazyColumn(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(dailyTotals) { (date, total) ->
+
                     Column {
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable {
-                                    navController.navigate("remittanceDetailDay/${date}/${startDate}/${endDate}")
+                                    navController.navigate("remittanceDetailDay/$date/$startDate/$endDate")
                                 }
                                 .padding(vertical = 4.dp),
                             horizontalArrangement = Arrangement.SpaceBetween
@@ -86,19 +91,18 @@ fun RemittanceDetailScreen(startDate: String, endDate: String, navController: Na
                                 style = MaterialTheme.typography.bodyMedium
                             )
                             Text(
-                                text = "₱${"%,.2f".format(total)}",
+                                text = "₱${"%,.2f".format(total.toDouble())}",
                                 style = MaterialTheme.typography.bodyMedium,
                                 textAlign = TextAlign.End
                             )
                         }
-                        Divider() // ✅ line between each date row
+                        Divider()
                     }
                 }
             }
 
-            // Grand total
             Text(
-                text = "TOTAL: ₱${"%,.2f".format(grandTotal)}",
+                text = "TOTAL: ₱${"%,.2f".format(grandTotal.toDouble())}",
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.primary
             )

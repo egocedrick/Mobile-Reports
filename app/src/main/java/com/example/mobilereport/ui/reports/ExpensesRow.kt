@@ -17,16 +17,27 @@ fun ExpensesRow(item: ExpensesItem) {
             .padding(vertical = 4.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text("Category: ${item.category}", style = MaterialTheme.typography.titleMedium)
+
+            Text("Bus: ${item.busNumber}", style = MaterialTheme.typography.titleMedium)
+
             Spacer(Modifier.height(4.dp))
+            Text("Fuel-in: ${item.fuelin}", style = MaterialTheme.typography.bodyMedium)
+
+            Spacer(Modifier.height(4.dp))
+            Text("Washing: ${item.washing}", style = MaterialTheme.typography.bodyMedium)
+
+            Spacer(Modifier.height(4.dp))
+            Text("Parking: ${item.parking}", style = MaterialTheme.typography.bodyMedium)
+
+            Spacer(Modifier.height(4.dp))
+            Text("Toll Fee: ${item.tollfee}", style = MaterialTheme.typography.bodyMedium)
+
+            Spacer(Modifier.height(8.dp))
             Text(
-                "Amount: ₱${"%,.2f".format(item.amount)}",
-                style = MaterialTheme.typography.bodyLarge
+                "Total: ₱${"%,.2f".format(item.totalExpenses)}",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.primary
             )
-            item.notes?.let {
-                Spacer(Modifier.height(4.dp))
-                Text("Notes: $it", style = MaterialTheme.typography.bodySmall)
-            }
         }
     }
 }

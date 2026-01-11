@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.mobilereport.data.MockData
+import com.example.mobilereport.model.InspectorItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -19,9 +19,10 @@ fun InspectorNamesScreen(
     date: String,
     startDate: String,
     endDate: String,
-    navController: NavController
+    navController: NavController,
+    inspectors: List<InspectorItem> // ✅ pass real data here
 ) {
-    val inspectorsForDay = MockData.inspectors.filter { it.date == date }
+    val inspectorsForDay = inspectors.filter { it.date == date }
 
     Scaffold(
         topBar = {

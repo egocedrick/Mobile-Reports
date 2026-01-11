@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.mobilereport.data.MockData
 import com.example.mobilereport.model.DispatcherItem
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -21,11 +20,13 @@ fun DispatcherDetailDayScreen(
     date: String,
     startDate: String,
     endDate: String,
-    navController: NavController
+    navController: NavController,
+    itemsForDay: List<DispatcherItem>
 ) {
-    val itemsForDay = MockData.dispatches.filter { it.date == date }
-    val totalDispatch = itemsForDay.count { it.type == "D" }
-    val totalReverse = itemsForDay.count { it.type == "R" }
+    val totalDispatch = itemsForDay.count { it.dispatcher == "D" }
+    val totalReverse = itemsForDay.count { it.dispatcher == "R" }
+
+    val scrollState = rememberScrollState()
 
     Scaffold(
         topBar = {
@@ -39,57 +40,81 @@ fun DispatcherDetailDayScreen(
             )
         }
     ) { padding ->
+
         Column(
             modifier = Modifier
                 .padding(padding)
                 .padding(16.dp)
         ) {
+
             Text("Date: $date", style = MaterialTheme.typography.titleMedium)
             Text("Report Range: $startDate to $endDate", style = MaterialTheme.typography.bodyMedium)
+
             Spacer(Modifier.height(12.dp))
 
-            // ✅ Horizontal scroll wrapper
+            // ✅ TABLE WITH HORIZONTAL SCROLL
             Row(
                 modifier = Modifier
-                    .horizontalScroll(rememberScrollState())
+                    .horizontalScroll(scrollState)
                     .fillMaxWidth()
             ) {
                 Column {
-                    // Header row
-                    Row {
-                        Text("BUS", Modifier.width(120.dp), style = MaterialTheme.typography.titleSmall)
-                        Text("Time", Modifier.width(120.dp), style = MaterialTheme.typography.titleSmall)
-                        Text("Dispatch", Modifier.width(120.dp), style = MaterialTheme.typography.titleSmall)
-                        Text("Conductor", Modifier.width(120.dp), style = MaterialTheme.typography.titleSmall)
-                        Text("Driver", Modifier.width(120.dp), style = MaterialTheme.typography.titleSmall)
+
+                    // ✅ HEADER
+                    Row(Modifier.padding(vertical = 4.dp)) {
+                        TableHeader("BUS")
+                        TableHeader("Time")
+                        TableHeader("Dispatch")
+                        TableHeader("Conductor")
+                        TableHeader("Driver")
                     }
+
                     Divider()
 
-                    // Body rows
+                    // ✅ BODY ROWS
                     LazyColumn(
-                        modifier = Modifier.heightIn(max = 400.dp), // limit height, scrollable
+                        modifier = Modifier.heightIn(max = 400.dp),
                         verticalArrangement = Arrangement.spacedBy(2.dp)
                     ) {
-                        items(itemsForDay) { d: DispatcherItem ->
+                        items(itemsForDay) { d ->
+
                             Row {
-                                Text(d.busNumber, Modifier.width(120.dp), style = MaterialTheme.typography.bodySmall)
-                                Text(d.time, Modifier.width(120.dp), style = MaterialTheme.typography.bodySmall)
-                                Text(d.dispatcher, Modifier.width(120.dp), style = MaterialTheme.typography.bodySmall)
-                                Text(d.conductor, Modifier.width(120.dp), style = MaterialTheme.typography.bodySmall)
-                                Text(d.driver, Modifier.width(120.dp), style = MaterialTheme.typography.bodySmall)
+                                TableCell(d.busNumber)
+                                TableCell(d.time)
+                                TableCell(d.dispatcher)
+                                TableCell(d.conductor)
+                                TableCell(d.driver)
                             }
+
+                            Divider()
                         }
                     }
                 }
             }
 
-            Divider(Modifier.padding(vertical = 8.dp))
+            Divider(Modifier.padding(vertical = 12.dp))
 
-            Text(
-                "TOTAL Dispatch: $totalDispatch   Reverse: $totalReverse",
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.primary
-            )
+            // ✅ CLEAN TOTALS
+            Text("TOTAL Dispatch: $totalDispatch", style = MaterialTheme.typography.titleMedium)
+            Text("TOTAL Reverse: $totalReverse", style = MaterialTheme.typography.titleMedium)
         }
     }
+}
+
+@Composable
+private fun TableHeader(text: String) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.titleSmall,
+        modifier = Modifier.width(120.dp)
+    )
+}
+
+@Composable
+private fun TableCell(text: String) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.bodySmall,
+        modifier = Modifier.width(120.dp)
+    )
 }

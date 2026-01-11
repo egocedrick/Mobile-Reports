@@ -1,7 +1,7 @@
 package com.example.mobilereport.data
 
 import com.example.mobilereport.model.*
-
+/*
 object MockData {
     val remittances = listOf(
         RemittanceItem(
@@ -193,3 +193,5 @@ object MockData {
         ExpensesItem("2025-10-06", "Supplies", 240.0, notes = "Office supplies")
     ).toList()
 }
+
+ */

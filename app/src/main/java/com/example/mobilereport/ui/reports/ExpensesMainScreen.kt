@@ -39,6 +39,7 @@ fun ExpensesMainScreen(navController: NavController) {
             modifier = Modifier.padding(padding).fillMaxSize().padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+
             Button(onClick = {
                 val picker = MaterialDatePicker.Builder.dateRangePicker()
                     .setTitleText("Select Date Range")
@@ -60,11 +61,15 @@ fun ExpensesMainScreen(navController: NavController) {
             dateRange?.let { (start, end) ->
                 Text("Showing results from $start to $end")
                 Spacer(Modifier.height(12.dp))
-                // Placeholder for expenses data
-                ExpensesSection(
-                    dateRange = dateRange,
-                    onDayClick = { date -> navController.navigate("expensesDetail/$date") }
-                )
+
+                Button(
+                    onClick = {
+                        navController.navigate("expensesDetail/$start/$end")
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("View Expenses Summary")
+                }
             }
         }
     }

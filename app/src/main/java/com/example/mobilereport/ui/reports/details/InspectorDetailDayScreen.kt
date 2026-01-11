@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.mobilereport.data.MockData
 import com.example.mobilereport.model.InspectorItem
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -22,9 +21,10 @@ fun InspectorDetailDayScreen(
     date: String,
     startDate: String,
     endDate: String,
-    navController: NavController
+    navController: NavController,
+    inspections: List<InspectorItem> // ✅ pass real data here
 ) {
-    val itemsForInspector = MockData.inspections.filter {
+    val itemsForInspector = inspections.filter {
         it.date == date && it.inspector == inspectorName
     }
 

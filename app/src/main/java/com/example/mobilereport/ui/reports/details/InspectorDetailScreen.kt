@@ -11,24 +11,28 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.mobilereport.data.MockData
+import com.example.mobilereport.model.InspectorItem
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InspectorDetailScreen(startDate: String, endDate: String, navController: NavController) {
+fun InspectorDetailScreen(
+    startDate: String,
+    endDate: String,
+    navController: NavController,
+    inspectors: List<InspectorItem>
+) {
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     val start = LocalDate.parse(startDate, formatter)
     val end = LocalDate.parse(endDate, formatter)
 
     val days = daysBetweenInclusive(start, end)
 
-    // compute totals per day
     val dailyTotals = days.map { date ->
-        val itemsForDay = MockData.inspectors.filter { it.date == date.toString() }
-        val totalForDay = itemsForDay.size // bilang ng bus inspected that day
+        val itemsForDay = inspectors.filter { it.date == date.toString() }
+        val totalForDay = itemsForDay.size
         date to totalForDay
     }
 
@@ -53,14 +57,16 @@ fun InspectorDetailScreen(startDate: String, endDate: String, navController: Nav
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            // Header row
+
+            // Header
             Row(Modifier.fillMaxWidth()) {
                 Text("Date", Modifier.weight(1f), style = MaterialTheme.typography.titleMedium)
                 Text("Buses Inspected", Modifier.weight(1f), style = MaterialTheme.typography.titleMedium)
             }
+
             Divider()
 
-            // Body rows with divider in between
+            // Daily list
             LazyColumn(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -86,12 +92,12 @@ fun InspectorDetailScreen(startDate: String, endDate: String, navController: Nav
                                 style = MaterialTheme.typography.bodyMedium
                             )
                         }
-                        Divider() // ✅ line between each date row
+                        Divider()
                     }
                 }
             }
 
-            // Grand total
+            // Footer total
             Text(
                 text = "TOTAL Buses Inspected: $grandTotal",
                 style = MaterialTheme.typography.headlineSmall,

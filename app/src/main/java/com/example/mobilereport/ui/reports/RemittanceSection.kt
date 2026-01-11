@@ -51,7 +51,10 @@ fun RemittanceSection(
                     ) {
                         Text(date.toString(), style = MaterialTheme.typography.titleMedium)
                         Spacer(Modifier.weight(1f))
-                        Text("₱${mockTotalFor(date)}", style = MaterialTheme.typography.titleMedium)
+                        Text(
+                            "₱${"%,.2f".format(mockTotalFor(date).toDouble())}", // ✅ FIXED
+                            style = MaterialTheme.typography.titleMedium
+                        )
                     }
                 }
             }

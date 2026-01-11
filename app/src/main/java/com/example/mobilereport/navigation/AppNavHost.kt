@@ -8,6 +8,7 @@ import androidx.navigation.navArgument
 import com.example.mobilereport.ui.login.LoginScreen
 import com.example.mobilereport.ui.reports.*
 import com.example.mobilereport.ui.reports.details.*
+import com.example.mobilereport.model.*
 
 @Composable
 fun AppNavHost(
@@ -19,7 +20,8 @@ fun AppNavHost(
     var isLoading by remember { mutableStateOf(false) }
 
     NavHost(navController = navController, startDestination = "login") {
-        // 🔑 Login
+
+        // ✅ LOGIN
         composable("login") {
             LoginScreen(
                 onLogin = { user, pass ->
@@ -39,7 +41,7 @@ fun AppNavHost(
             )
         }
 
-        // 🔑 Dashboard
+        // ✅ DASHBOARD
         composable("reports") {
             ReportsScreen(
                 isDarkMode = isDarkMode,
@@ -48,102 +50,127 @@ fun AppNavHost(
             )
         }
 
-        // 🔑 Range-level Detail Screens
+        // ✅ MAIN SCREENS
+        composable("dispatcherMain") { DispatcherMainScreen(navController) }
+        composable("inspectorMain") { InspectorMainScreen(navController) }
+        composable("expensesMain") { ExpensesMainScreen(navController) }
+        composable("remittanceMain") { RemittanceMainScreen(navController) }
+
+        // ✅ RANGE-LEVEL SUMMARY
         composable(
-            route = "remittanceDetail/{startDate}/{endDate}",
+            "remittanceDetail/{startDate}/{endDate}",
             arguments = listOf(
                 navArgument("startDate") { defaultValue = "" },
                 navArgument("endDate") { defaultValue = "" }
             )
         ) { backStackEntry ->
-            val start = backStackEntry.arguments?.getString("startDate") ?: ""
-            val end = backStackEntry.arguments?.getString("endDate") ?: ""
-            RemittanceDetailScreen(start, end, navController)
+            RemittanceDetailScreen(
+                startDate = backStackEntry.arguments?.getString("startDate").orEmpty(),
+                endDate = backStackEntry.arguments?.getString("endDate").orEmpty(),
+                navController = navController,
+                remittances = emptyList()
+            )
         }
 
         composable(
-            route = "dispatcherDetail/{startDate}/{endDate}",
+            "dispatcherDetail/{startDate}/{endDate}",
             arguments = listOf(
                 navArgument("startDate") { defaultValue = "" },
                 navArgument("endDate") { defaultValue = "" }
             )
         ) { backStackEntry ->
-            val start = backStackEntry.arguments?.getString("startDate") ?: ""
-            val end = backStackEntry.arguments?.getString("endDate") ?: ""
-            DispatcherDetailScreen(start, end, navController)
+            DispatcherDetailScreen(
+                startDate = backStackEntry.arguments?.getString("startDate").orEmpty(),
+                endDate = backStackEntry.arguments?.getString("endDate").orEmpty(),
+                navController = navController,
+                dispatches = emptyList()
+            )
         }
 
         composable(
-            route = "inspectorDetail/{startDate}/{endDate}",
+            "inspectorDetail/{startDate}/{endDate}",
             arguments = listOf(
                 navArgument("startDate") { defaultValue = "" },
                 navArgument("endDate") { defaultValue = "" }
             )
         ) { backStackEntry ->
-            val start = backStackEntry.arguments?.getString("startDate") ?: ""
-            val end = backStackEntry.arguments?.getString("endDate") ?: ""
-            InspectorDetailScreen(start, end, navController)
+            InspectorDetailScreen(
+                startDate = backStackEntry.arguments?.getString("startDate").orEmpty(),
+                endDate = backStackEntry.arguments?.getString("endDate").orEmpty(),
+                navController = navController,
+                inspectors = emptyList()
+            )
         }
 
         composable(
-            route = "expensesDetail/{startDate}/{endDate}",
+            "expensesDetail/{startDate}/{endDate}",
             arguments = listOf(
                 navArgument("startDate") { defaultValue = "" },
                 navArgument("endDate") { defaultValue = "" }
             )
         ) { backStackEntry ->
-            val start = backStackEntry.arguments?.getString("startDate") ?: ""
-            val end = backStackEntry.arguments?.getString("endDate") ?: ""
-            ExpensesDetailScreen(start, end, navController)
-        }
-
-        // 🔑 Day-level Detail Screens (with inclusive range)
-        composable(
-            route = "remittanceDetailDay/{date}/{startDate}/{endDate}",
-            arguments = listOf(
-                navArgument("date") { defaultValue = "" },
-                navArgument("startDate") { defaultValue = "" },
-                navArgument("endDate") { defaultValue = "" }
+            ExpensesDetailScreen(
+                startDate = backStackEntry.arguments?.getString("startDate").orEmpty(),
+                endDate = backStackEntry.arguments?.getString("endDate").orEmpty(),
+                navController = navController,
+                expenses = emptyList()
             )
-        ) { backStackEntry ->
-            val date = backStackEntry.arguments?.getString("date") ?: ""
-            val start = backStackEntry.arguments?.getString("startDate") ?: ""
-            val end = backStackEntry.arguments?.getString("endDate") ?: ""
-            RemittanceDetailDayScreen(date, start, end, navController)
         }
 
+        // ✅ DAY-LEVEL DETAIL
         composable(
-            route = "dispatcherDetailDay/{date}/{startDate}/{endDate}",
-            arguments = listOf(
-                navArgument("date") { defaultValue = "" },
-                navArgument("startDate") { defaultValue = "" },
-                navArgument("endDate") { defaultValue = "" }
-            )
-        ) { backStackEntry ->
-            val date = backStackEntry.arguments?.getString("date") ?: ""
-            val start = backStackEntry.arguments?.getString("startDate") ?: ""
-            val end = backStackEntry.arguments?.getString("endDate") ?: ""
-            DispatcherDetailDayScreen(date, start, end, navController)
-        }
-
-        // 🔑 Inspector Names per Date (middle layer)
-        composable(
-            route = "inspectorNames/{date}/{startDate}/{endDate}",
+            "remittanceDetailDay/{date}/{startDate}/{endDate}",
             arguments = listOf(
                 navArgument("date") { defaultValue = "" },
                 navArgument("startDate") { defaultValue = "" },
                 navArgument("endDate") { defaultValue = "" }
             )
         ) { backStackEntry ->
-            val date = backStackEntry.arguments?.getString("date") ?: ""
-            val start = backStackEntry.arguments?.getString("startDate") ?: ""
-            val end = backStackEntry.arguments?.getString("endDate") ?: ""
-            InspectorNamesScreen(date, start, end, navController)
+            RemittanceDetailDayScreen(
+                date = backStackEntry.arguments?.getString("date").orEmpty(),
+                startDate = backStackEntry.arguments?.getString("startDate").orEmpty(),
+                endDate = backStackEntry.arguments?.getString("endDate").orEmpty(),
+                navController = navController,
+                remittances = emptyList()
+            )
         }
 
-        // ✅ Inspector Day route with inspectorName
         composable(
-            route = "inspectorDetailDay/{inspectorName}/{date}/{startDate}/{endDate}",
+            "dispatcherDetailDay/{date}/{startDate}/{endDate}",
+            arguments = listOf(
+                navArgument("date") { defaultValue = "" },
+                navArgument("startDate") { defaultValue = "" },
+                navArgument("endDate") { defaultValue = "" }
+            )
+        ) { backStackEntry ->
+            DispatcherDetailDayScreen(
+                date = backStackEntry.arguments?.getString("date").orEmpty(),
+                startDate = backStackEntry.arguments?.getString("startDate").orEmpty(),
+                endDate = backStackEntry.arguments?.getString("endDate").orEmpty(),
+                navController = navController,
+                itemsForDay = emptyList()
+            )
+        }
+
+        composable(
+            "inspectorNames/{date}/{startDate}/{endDate}",
+            arguments = listOf(
+                navArgument("date") { defaultValue = "" },
+                navArgument("startDate") { defaultValue = "" },
+                navArgument("endDate") { defaultValue = "" }
+            )
+        ) { backStackEntry ->
+            InspectorNamesScreen(
+                date = backStackEntry.arguments?.getString("date").orEmpty(),
+                startDate = backStackEntry.arguments?.getString("startDate").orEmpty(),
+                endDate = backStackEntry.arguments?.getString("endDate").orEmpty(),
+                navController = navController,
+                inspectors = emptyList()
+            )
+        }
+
+        composable(
+            "inspectorDetailDay/{inspectorName}/{date}/{startDate}/{endDate}",
             arguments = listOf(
                 navArgument("inspectorName") { defaultValue = "" },
                 navArgument("date") { defaultValue = "" },
@@ -151,25 +178,31 @@ fun AppNavHost(
                 navArgument("endDate") { defaultValue = "" }
             )
         ) { backStackEntry ->
-            val inspectorName = backStackEntry.arguments?.getString("inspectorName") ?: ""
-            val date = backStackEntry.arguments?.getString("date") ?: ""
-            val start = backStackEntry.arguments?.getString("startDate") ?: ""
-            val end = backStackEntry.arguments?.getString("endDate") ?: ""
-            InspectorDetailDayScreen(inspectorName, date, start, end, navController)
+            InspectorDetailDayScreen(
+                inspectorName = backStackEntry.arguments?.getString("inspectorName").orEmpty(),
+                date = backStackEntry.arguments?.getString("date").orEmpty(),
+                startDate = backStackEntry.arguments?.getString("startDate").orEmpty(),
+                endDate = backStackEntry.arguments?.getString("endDate").orEmpty(),
+                navController = navController,
+                inspections = emptyList()
+            )
         }
 
         composable(
-            route = "expensesDetailDay/{date}/{startDate}/{endDate}",
+            "expensesDetailDay/{date}/{startDate}/{endDate}",
             arguments = listOf(
                 navArgument("date") { defaultValue = "" },
                 navArgument("startDate") { defaultValue = "" },
                 navArgument("endDate") { defaultValue = "" }
             )
         ) { backStackEntry ->
-            val date = backStackEntry.arguments?.getString("date") ?: ""
-            val start = backStackEntry.arguments?.getString("startDate") ?: ""
-            val end = backStackEntry.arguments?.getString("endDate") ?: ""
-            ExpensesDetailDayScreen(date, start, end, navController)
+            ExpensesDetailDayScreen(
+                date = backStackEntry.arguments?.getString("date").orEmpty(),
+                startDate = backStackEntry.arguments?.getString("startDate").orEmpty(),
+                endDate = backStackEntry.arguments?.getString("endDate").orEmpty(),
+                navController = navController,
+                expensesForDay = emptyList()
+            )
         }
     }
 }

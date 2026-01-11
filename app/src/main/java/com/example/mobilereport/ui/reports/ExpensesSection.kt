@@ -30,17 +30,15 @@ fun ExpensesSection(
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        // Header
         Text(
             text = "Expenses from $start to $end",
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.padding(16.dp)
         )
 
-        // Scrollable list
         LazyColumn(
             modifier = Modifier
-                .weight(1f) // 🔑 bounded height
+                .weight(1f)
                 .fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(12.dp),
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
@@ -70,7 +68,7 @@ fun ExpensesSection(
                             )
                         }
                         Text(
-                            text = "₱$mockTotal",
+                            text = "₱${"%,.2f".format(mockTotal.toDouble())}", // ✅ FIXED
                             style = MaterialTheme.typography.titleMedium
                         )
                     }

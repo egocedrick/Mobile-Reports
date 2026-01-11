@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.mobilereport.data.MockData
 import com.example.mobilereport.model.RemittanceItem
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -21,9 +20,10 @@ fun RemittanceDetailDayScreen(
     date: String,
     startDate: String,
     endDate: String,
-    navController: NavController
+    navController: NavController,
+    remittances: List<RemittanceItem>
 ) {
-    val itemsForDay = MockData.remittances.filter { it.dateRequested == date }
+    val itemsForDay = remittances.filter { it.date == date }
 
     val totalTrips = itemsForDay.sumOf { it.trips }
     val totalNet = itemsForDay.sumOf { it.netCash }
@@ -41,58 +41,81 @@ fun RemittanceDetailDayScreen(
             )
         }
     ) { padding ->
+
         Column(
             modifier = Modifier
                 .padding(padding)
                 .padding(16.dp)
         ) {
+
             Text("Date: $date", style = MaterialTheme.typography.titleMedium)
             Text("Report Range: $startDate to $endDate", style = MaterialTheme.typography.bodyMedium)
+
             Spacer(Modifier.height(12.dp))
 
-            // ✅ Horizontal scroll wrapper
             Row(
                 modifier = Modifier
                     .horizontalScroll(rememberScrollState())
                     .fillMaxWidth()
             ) {
                 Column {
-                    // Header row
-                    Row {
-                        Text("BUS", Modifier.width(120.dp), style = MaterialTheme.typography.titleSmall)
-                        Text("Time", Modifier.width(120.dp), style = MaterialTheme.typography.titleSmall)
-                        Text("No. of Trip", Modifier.width(120.dp), style = MaterialTheme.typography.titleSmall)
-                        Text("Net Amount", Modifier.width(140.dp), style = MaterialTheme.typography.titleSmall)
-                        Text("Ingresso Amount", Modifier.width(160.dp), style = MaterialTheme.typography.titleSmall)
+
+                    // ✅ HEADER
+                    Row(Modifier.padding(vertical = 4.dp)) {
+                        TableHeader("Bus")
+                        TableHeader("Time")
+                        TableHeader("Trips")
+                        TableHeader("Net Amount")
+                        TableHeader("Ingresso")
                     }
+
                     Divider()
 
-                    // Body rows
+                    // ✅ BODY
                     LazyColumn(
                         modifier = Modifier.heightIn(max = 400.dp),
                         verticalArrangement = Arrangement.spacedBy(2.dp)
                     ) {
-                        items(itemsForDay) { item: RemittanceItem ->
+                        items(itemsForDay) { item ->
+
                             Row {
-                                Text(item.vehicle, Modifier.width(120.dp), style = MaterialTheme.typography.bodySmall)
-                                Text(item.dateDispatched, Modifier.width(120.dp), style = MaterialTheme.typography.bodySmall)
-                                Text(item.trips.toString(), Modifier.width(120.dp), style = MaterialTheme.typography.bodySmall)
-                                Text("₱${"%,.2f".format(item.netCash)}", Modifier.width(140.dp), style = MaterialTheme.typography.bodySmall)
-                                Text("₱${"%,.2f".format(item.amountRemittance)}", Modifier.width(160.dp), style = MaterialTheme.typography.bodySmall)
+                                TableCell(item.busNumber)
+                                TableCell(item.time)
+                                TableCell(item.trips.toString())
+                                TableCell("₱${"%,.2f".format(item.netCash.toDouble())}")
+                                TableCell("₱${"%,.2f".format(item.amountRemittance.toDouble())}")
                             }
+
+                            Divider()
                         }
                     }
                 }
             }
 
-            Divider(Modifier.padding(vertical = 8.dp))
+            Divider(Modifier.padding(vertical = 12.dp))
 
-            // Totals
-            Text(
-                "TOTAL Trips: $totalTrips   Net: ₱${"%,.2f".format(totalNet)}   Ingresso: ₱${"%,.2f".format(totalIngresso)}",
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.primary
-            )
+            // ✅ CLEAN TOTALS
+            Text("Total Trips: $totalTrips", style = MaterialTheme.typography.titleMedium)
+            Text("Total Net: ₱${"%,.2f".format(totalNet.toDouble())}", style = MaterialTheme.typography.titleMedium)
+            Text("Total Ingresso: ₱${"%,.2f".format(totalIngresso.toDouble())}", style = MaterialTheme.typography.titleMedium)
         }
     }
+}
+
+@Composable
+private fun TableHeader(text: String) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.titleSmall,
+        modifier = Modifier.width(140.dp)
+    )
+}
+
+@Composable
+private fun TableCell(text: String) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.bodySmall,
+        modifier = Modifier.width(140.dp)
+    )
 }

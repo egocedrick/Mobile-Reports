@@ -39,6 +39,8 @@ fun DispatcherMainScreen(navController: NavController) {
             modifier = Modifier.padding(padding).fillMaxSize().padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+
+            // Date Range Picker
             Button(onClick = {
                 val picker = MaterialDatePicker.Builder.dateRangePicker()
                     .setTitleText("Select Date Range")
@@ -57,13 +59,19 @@ fun DispatcherMainScreen(navController: NavController) {
                 Text("Pick Date Range")
             }
 
+            // Summary Navigation
             dateRange?.let { (start, end) ->
                 Text("Showing results from $start to $end")
                 Spacer(Modifier.height(12.dp))
-                DispatcherSection(
-                    dateRange = dateRange,
-                    onDayClick = { date -> navController.navigate("dispatcherDetail/$date") }
-                )
+
+                Button(
+                    onClick = {
+                        navController.navigate("dispatcherDetail/$start/$end")
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("View Dispatcher Summary")
+                }
             }
         }
     }

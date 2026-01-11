@@ -23,7 +23,7 @@ fun DispatcherRow(item: DispatcherItem) {
             Text("Driver: ${item.driver}", style = MaterialTheme.typography.bodySmall)
             Text("Conductor: ${item.conductor}", style = MaterialTheme.typography.bodySmall)
             Spacer(Modifier.height(4.dp))
-            Text("From: ${item.dispatchFrom} → To: ${item.dispatchTo}", style = MaterialTheme.typography.bodyMedium)
+            Text("From: ${item.dispatcher} → To: ${item.dispatcher}", style = MaterialTheme.typography.bodyMedium)
         }
     }
 }

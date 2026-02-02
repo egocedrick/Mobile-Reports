@@ -64,5 +64,3 @@ Currently **UI-only** with no backend or data integration, but designed to showc
 - Built to demonstrate dashboard design, navigation flows, and theming.
 - Part of my mobile security and utility portfolio.
 
-## 📄 License
-MIT License (or specify your license here)

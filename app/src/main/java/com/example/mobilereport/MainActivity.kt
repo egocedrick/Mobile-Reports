@@ -19,7 +19,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // ✅ Create ThemeViewModel using Factory
         val themeViewModel = ViewModelProvider(
             this,
             ThemeViewModel.Factory(applicationContext)

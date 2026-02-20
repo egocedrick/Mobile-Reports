@@ -21,7 +21,6 @@ fun AppNavHost(
 
     NavHost(navController = navController, startDestination = "login") {
 
-        // ✅ LOGIN
         composable("login") {
             LoginScreen(
                 onLogin = { user, pass ->
@@ -41,7 +40,6 @@ fun AppNavHost(
             )
         }
 
-        // ✅ DASHBOARD
         composable("reports") {
             ReportsScreen(
                 isDarkMode = isDarkMode,
@@ -50,13 +48,11 @@ fun AppNavHost(
             )
         }
 
-        // ✅ MAIN SCREENS
         composable("dispatcherMain") { DispatcherMainScreen(navController) }
         composable("inspectorMain") { InspectorMainScreen(navController) }
         composable("expensesMain") { ExpensesMainScreen(navController) }
         composable("remittanceMain") { RemittanceMainScreen(navController) }
 
-        // ✅ RANGE-LEVEL SUMMARY
         composable(
             "remittanceDetail/{startDate}/{endDate}",
             arguments = listOf(
@@ -117,7 +113,6 @@ fun AppNavHost(
             )
         }
 
-        // ✅ DAY-LEVEL DETAIL
         composable(
             "remittanceDetailDay/{date}/{startDate}/{endDate}",
             arguments = listOf(

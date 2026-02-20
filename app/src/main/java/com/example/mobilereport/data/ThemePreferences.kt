@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import java.io.IOException
 
-// ✅ DataStore with corruption handler
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
     name = "settings",
     corruptionHandler = ReplaceFileCorruptionHandler(
@@ -27,7 +26,7 @@ object ThemePreferences {
     fun getThemePreference(context: Context): Flow<Boolean> {
         return context.dataStore.data
             .catch { exception ->
-                // ✅ Handle IO or unexpected errors gracefully
+
                 if (exception is IOException) {
                     emit(emptyPreferences())
                 } else {

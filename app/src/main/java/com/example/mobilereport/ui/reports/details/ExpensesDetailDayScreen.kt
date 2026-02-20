@@ -54,7 +54,6 @@ fun ExpensesDetailDayScreen(
             ) {
                 Column {
 
-                    // ✅ HEADER
                     Row(Modifier.padding(vertical = 4.dp)) {
                         TableHeader("Bus")
                         TableHeader("Fuel-in")
@@ -66,7 +65,6 @@ fun ExpensesDetailDayScreen(
 
                     Divider()
 
-                    // ✅ BODY
                     expensesForDay.forEach { e ->
                         Row(Modifier.padding(vertical = 4.dp)) {
                             TableCell(e.busNumber)

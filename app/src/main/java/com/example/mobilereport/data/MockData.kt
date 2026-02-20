@@ -11,7 +11,7 @@ object MockData {
             vehicle = "BUS-101",
             grossIncome = 8500.0,
             dateDispatched = "2025-10-07",
-            timeDispatched = "06:30 AM",   // ➕ bagong field
+            timeDispatched = "06:30 AM",
             dateRemitted = "2025-10-07",
             route = "A — B",
             driver = "Juan Dela Cruz",
@@ -38,7 +38,7 @@ object MockData {
             vehicle = "BUS-202",
             grossIncome = 5400.0,
             dateDispatched = "2025-10-07",
-            timeDispatched = "07:15 AM",   // ➕ bagong field
+            timeDispatched = "07:15 AM",
             dateRemitted = "2025-10-07",
             route = "C — D",
             driver = "Maria Lopez",
@@ -87,7 +87,7 @@ object MockData {
         )
     )
 
-    // Inspector entries with time, discrepancy, and remainingPassenger
+
     val inspectors = listOf(
         InspectorItem(
             requestedRange = "2025-10-01 — 2025-10-07",

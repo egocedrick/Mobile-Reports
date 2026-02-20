@@ -31,7 +31,7 @@ fun SectionWithDate(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            // ✅ Use the shared DateRangePickerSection
+
             DateRangePickerSection(
                 title = "Select $title Date Range"
             ) { start, end ->
@@ -39,7 +39,6 @@ fun SectionWithDate(
                 onDateRangeSelected(start, end)
             }
 
-            // Show chip only if a range is selected
             selectedRange?.let { (start, end) ->
                 AssistChip(
                     onClick = { /* optional: reopen picker */ },
@@ -57,7 +56,6 @@ fun SectionWithDate(
 
             Divider(thickness = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)
 
-            // Section Content
             content()
         }
     }

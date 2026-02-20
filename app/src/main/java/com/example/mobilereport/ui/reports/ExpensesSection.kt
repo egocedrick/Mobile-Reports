@@ -68,7 +68,7 @@ fun ExpensesSection(
                             )
                         }
                         Text(
-                            text = "₱${"%,.2f".format(mockTotal.toDouble())}", // ✅ FIXED
+                            text = "₱${"%,.2f".format(mockTotal.toDouble())}",
                             style = MaterialTheme.typography.titleMedium
                         )
                     }

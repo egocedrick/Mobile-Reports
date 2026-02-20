@@ -68,7 +68,6 @@ fun ReportsScreen(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            // ✅ REMITTANCE
             Button(
                 onClick = {
                     selectedRoute = "remittanceDetail"
@@ -77,7 +76,6 @@ fun ReportsScreen(
                 modifier = Modifier.fillMaxWidth().height(60.dp)
             ) { Text("REMITTANCE") }
 
-            // ✅ DISPATCHER
             Button(
                 onClick = {
                     selectedRoute = "dispatcherDetail"
@@ -86,7 +84,6 @@ fun ReportsScreen(
                 modifier = Modifier.fillMaxWidth().height(60.dp)
             ) { Text("DISPATCHER") }
 
-            // ✅ INSPECTOR
             Button(
                 onClick = {
                     selectedRoute = "inspectorDetail"
@@ -95,7 +92,6 @@ fun ReportsScreen(
                 modifier = Modifier.fillMaxWidth().height(60.dp)
             ) { Text("INSPECTOR") }
 
-            // ✅ EXPENSES
             Button(
                 onClick = {
                     selectedRoute = "expensesDetail"
@@ -104,7 +100,6 @@ fun ReportsScreen(
                 modifier = Modifier.fillMaxWidth().height(60.dp)
             ) { Text("EXPENSES") }
 
-            // ✅ BUS LOCATION DASHBOARD
             Button(
                 onClick = {
                     val intent = Intent(
@@ -118,7 +113,6 @@ fun ReportsScreen(
         }
     }
 
-    // ✅ START DATE PICKER
     if (showStartPicker && selectedRoute != null) {
         val today = System.currentTimeMillis()
         val datePickerState = rememberDatePickerState(initialSelectedDateMillis = today)
@@ -155,7 +149,6 @@ fun ReportsScreen(
         }
     }
 
-    // ✅ END DATE PICKER
     if (showEndPicker && selectedRoute != null && startDate != null) {
         val today = System.currentTimeMillis()
         val datePickerState = rememberDatePickerState(initialSelectedDateMillis = today)

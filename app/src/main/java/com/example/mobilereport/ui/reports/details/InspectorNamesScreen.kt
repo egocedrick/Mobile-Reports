@@ -20,7 +20,7 @@ fun InspectorNamesScreen(
     startDate: String,
     endDate: String,
     navController: NavController,
-    inspectors: List<InspectorItem> // ✅ pass real data here
+    inspectors: List<InspectorItem>
 ) {
     val inspectorsForDay = inspectors.filter { it.date == date }
 

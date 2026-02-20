@@ -60,7 +60,6 @@ fun RemittanceDetailDayScreen(
             ) {
                 Column {
 
-                    // ✅ HEADER
                     Row(Modifier.padding(vertical = 4.dp)) {
                         TableHeader("Bus")
                         TableHeader("Time")
@@ -71,7 +70,6 @@ fun RemittanceDetailDayScreen(
 
                     Divider()
 
-                    // ✅ BODY
                     LazyColumn(
                         modifier = Modifier.heightIn(max = 400.dp),
                         verticalArrangement = Arrangement.spacedBy(2.dp)
@@ -94,7 +92,6 @@ fun RemittanceDetailDayScreen(
 
             Divider(Modifier.padding(vertical = 12.dp))
 
-            // ✅ CLEAN TOTALS
             Text("Total Trips: $totalTrips", style = MaterialTheme.typography.titleMedium)
             Text("Total Net: ₱${"%,.2f".format(totalNet.toDouble())}", style = MaterialTheme.typography.titleMedium)
             Text("Total Ingresso: ₱${"%,.2f".format(totalIngresso.toDouble())}", style = MaterialTheme.typography.titleMedium)

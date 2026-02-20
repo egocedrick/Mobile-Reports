@@ -52,7 +52,6 @@ fun DispatcherDetailDayScreen(
 
             Spacer(Modifier.height(12.dp))
 
-            // ✅ TABLE WITH HORIZONTAL SCROLL
             Row(
                 modifier = Modifier
                     .horizontalScroll(scrollState)
@@ -60,7 +59,6 @@ fun DispatcherDetailDayScreen(
             ) {
                 Column {
 
-                    // ✅ HEADER
                     Row(Modifier.padding(vertical = 4.dp)) {
                         TableHeader("BUS")
                         TableHeader("Time")
@@ -71,7 +69,6 @@ fun DispatcherDetailDayScreen(
 
                     Divider()
 
-                    // ✅ BODY ROWS
                     LazyColumn(
                         modifier = Modifier.heightIn(max = 400.dp),
                         verticalArrangement = Arrangement.spacedBy(2.dp)
@@ -94,7 +91,6 @@ fun DispatcherDetailDayScreen(
 
             Divider(Modifier.padding(vertical = 12.dp))
 
-            // ✅ CLEAN TOTALS
             Text("TOTAL Dispatch: $totalDispatch", style = MaterialTheme.typography.titleMedium)
             Text("TOTAL Reverse: $totalReverse", style = MaterialTheme.typography.titleMedium)
         }

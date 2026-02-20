@@ -22,7 +22,7 @@ fun InspectorDetailDayScreen(
     startDate: String,
     endDate: String,
     navController: NavController,
-    inspections: List<InspectorItem> // ✅ pass real data here
+    inspections: List<InspectorItem>
 ) {
     val itemsForInspector = inspections.filter {
         it.date == date && it.inspector == inspectorName
@@ -52,7 +52,6 @@ fun InspectorDetailDayScreen(
             Text("Report Range: $startDate to $endDate", style = MaterialTheme.typography.bodySmall)
             Spacer(Modifier.height(12.dp))
 
-            // ✅ Horizontal scroll wrapper
             Row(
                 modifier = Modifier
                     .horizontalScroll(rememberScrollState())

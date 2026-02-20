@@ -97,7 +97,6 @@ fun InspectorDetailScreen(
                 }
             }
 
-            // Footer total
             Text(
                 text = "TOTAL Buses Inspected: $grandTotal",
                 style = MaterialTheme.typography.headlineSmall,

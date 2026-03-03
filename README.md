@@ -46,6 +46,12 @@ Currently **UI-only** with no backend or data integration, but designed to showc
   - Calendar date range picker
   - Dashboard navigation
 
+## Impact
+- Provides mobile UI for company reports.
+- Enables clients to access reports anytime, anywhere.
+- Allows targeted monitoring of specific devices or employees (e.g., drivers, conductors).
+- Ensures employees can only view reports, not edit or configure them.
+
 ## Project Structure
 - `/ui` – Login, dashboard, and module layouts
 - `/logic` – Placeholder for future reporting logic
